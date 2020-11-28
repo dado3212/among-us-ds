@@ -9,19 +9,12 @@
 #include "player.h"
 #include "skeld.h"
 
-// typedef struct {
-// 	u16* gfx;
-// 	int color;
-// 	int x, y;
-// } Sprite;
-
-// void createSquare(Sprite sprite, OamState* screen, int count);
-// int speed = 3;
-// Sprite spriteTouchDown = {0, ARGB16(1, 55, 12, 55), 10, 10};
-// Sprite spriteKeyDown = {0, ARGB16(1, 31, 12, 12), 30, 30};
-
 void renderPlayer(Player* player) {
 	glBoxFilled(player->getX(), player->getY() - 15, player->getX() + 15, player->getY(), RGB15(0, 255, 0));
+}
+
+void renderBackground() {
+	glBoxFilled(0, 0, 256, 192, RGB15(50, 0, 0));
 }
 
 bool processInput(Player* player) {
@@ -68,6 +61,8 @@ int main(int argc, char** argv){
 	while(1) {
 		if(processInput(&player)) break;
 		glBegin2D();
+
+		renderBackground();
 
 		renderPlayer(&player);
 		// checkHitbox(&player, &pipes);
