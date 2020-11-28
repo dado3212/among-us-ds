@@ -1,4 +1,4 @@
-# SpriteTest
+# Among Us DS 🎮
 
 This example consist of:
 
