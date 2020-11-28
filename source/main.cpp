@@ -25,34 +25,29 @@ void renderPlayer(Player* player) {
 }
 
 bool processInput(Player* player) {
-		// 	scanKeys();
-	// 	int key = keysHeld();
-
-	// 	if(key & KEY_UP)
-	// 		spriteKeyDown.y -= speed;
-	// 	if(key & KEY_DOWN)
-	// 		spriteKeyDown.y += speed;
-	// 	if(key & KEY_RIGHT)
-	// 		spriteKeyDown.x += speed;
-	// 	if(key & KEY_LEFT)
-	// 			spriteKeyDown.x -= speed;
-	// 	if(key & KEY_TOUCH) {
-	// 		touchRead(&touch);
-	// 			spriteTouchDown.x = touch.px;
-	// 			spriteTouchDown.y = touch.py;
-	// 	}
-
 	scanKeys();
 	int keys = keysHeld();
-	if(keys & KEY_UP)
+	if(keys & KEY_UP) {
 		player->setY(player->getY() - 2);
-	if(keys & KEY_DOWN)
+	}
+	if(keys & KEY_DOWN) {
 		player->setY(player->getY() + 2);
-	if(keys & KEY_RIGHT)
+	}
+	if(keys & KEY_RIGHT) {
 		player->setX(player->getX() + 2);
-	if(keys & KEY_LEFT)
+	}
+	if(keys & KEY_LEFT) {
 		player->setX(player->getX() - 2);
-	if (keys & KEY_START) return true;
+	}
+	if (keys & KEY_START) {
+		return true;
+	}
+	if (keys & KEY_TOUCH) {
+		touchPosition touch;
+		touchRead(&touch);
+		player->setX(touch.px);
+		player->setY(touch.py);
+	}
 	// KEY_A
 	// KEY_START
 	return false;
@@ -134,23 +129,3 @@ int main(int argc, char** argv){
 
 	return 0;
 }
-
-// void createSquare(Sprite sprite, OamState* screen, int count) {
-// 	glBoxFilled(80, sprite.x, 86, sprite.y, sprite.color);
-// 	// dmaFillHalfWords(sprite.color, sprite.gfx, 16*16*2); // this is how to assign the color fill to the oam gfx
-// 	// oamSet(screen, //is it upper screen of bottom?
-// 	// 	count, // the oam entry to set
-// 	// 	sprite.x, sprite.y, // where should be positioned (x,y)?
-// 	// 	0, // priority
-// 	// 	15, // palette for 16 color sprite or alpha for bmp sprite
-// 	// 	SpriteSize_16x16, // size
-// 	// 	SpriteColorFormat_Bmp, // color type
-// 	// 	sprite.gfx, // the oam gfx
-// 	// 	0, //affine index
-// 	// 	true, //double the size of rotated sprites
-// 	// 	false, //don't hide the sprite
-// 	// 	false, false, //vflip, hflip
-// 	// 	false //apply mosaic
-// 	// 	);
-// }
-
