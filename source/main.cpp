@@ -9,13 +9,6 @@
 #include "player.h"
 #include "skeld.h"
 
-int score = 0;
-float speed = 0.3;
-float velocity = 0;
-const float gravityFactor = 0.05;
-const float gravity = 1.5;
-int color = RGB15(0, 255, 0);
-
 // typedef struct {
 // 	u16* gfx;
 // 	int color;
@@ -27,39 +20,41 @@ int color = RGB15(0, 255, 0);
 // Sprite spriteTouchDown = {0, ARGB16(1, 55, 12, 55), 10, 10};
 // Sprite spriteKeyDown = {0, ARGB16(1, 31, 12, 12), 30, 30};
 
-void processPhysics(Player* player) {
-	float newY = player->getY() + (gravity + velocity);
-	
-	if(newY <= 14.9) {
-		player->setY(15);
-		velocity = -1.5;
-	}else if(newY >= 192) {
-		player->setAlive(false);
-	}else {
-		player->setY(newY);
-	}
-
-	if(velocity != 0) {
-		if(velocity + gravityFactor <= 0) {
-			velocity += gravityFactor;
-		}else {
-			velocity = 0;
-		}
-	}
-}
-
 void renderPlayer(Player* player) {
-	glBoxFilled(80, player->getY() - 15, 86, player->getY(), color);
+	glBoxFilled(player->getX(), player->getY() - 15, player->getX() + 15, player->getY(), RGB15(0, 255, 0));
 }
 
 bool processInput(Player* player) {
+		// 	scanKeys();
+	// 	int key = keysHeld();
+
+	// 	if(key & KEY_UP)
+	// 		spriteKeyDown.y -= speed;
+	// 	if(key & KEY_DOWN)
+	// 		spriteKeyDown.y += speed;
+	// 	if(key & KEY_RIGHT)
+	// 		spriteKeyDown.x += speed;
+	// 	if(key & KEY_LEFT)
+	// 			spriteKeyDown.x -= speed;
+	// 	if(key & KEY_TOUCH) {
+	// 		touchRead(&touch);
+	// 			spriteTouchDown.x = touch.px;
+	// 			spriteTouchDown.y = touch.py;
+	// 	}
+
 	scanKeys();
-	int keys = keysDown();
-	if(keys & KEY_START) return true;
-	if(player->isAlive()) {
-		if(keys & KEY_A) velocity = -2.5;
-	}else {
-	}
+	int keys = keysHeld();
+	if(keys & KEY_UP)
+		player->setY(player->getY() - 2);
+	if(keys & KEY_DOWN)
+		player->setY(player->getY() + 2);
+	if(keys & KEY_RIGHT)
+		player->setX(player->getX() + 2);
+	if(keys & KEY_LEFT)
+		player->setX(player->getX() - 2);
+	if (keys & KEY_START) return true;
+	// KEY_A
+	// KEY_START
 	return false;
 }
 
@@ -76,15 +71,12 @@ int main(int argc, char** argv){
 	Player player;
 
 	while(1) {
-		// if(processInput(&player)) break;
+		if(processInput(&player)) break;
 		glBegin2D();
 
 		renderPlayer(&player);
 		// checkHitbox(&player, &pipes);
 		// renderPipes(&pipes);
-		if(player.isAlive()) {
-			processPhysics(&player);
-		}
 		glEnd2D();
 		glFlush(0);
 		swiWaitForVBlank();
