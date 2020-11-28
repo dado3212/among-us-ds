@@ -9,14 +9,6 @@
 
 #include "player.h"
 
-void renderPlayer(Player* player) {
-	glBoxFilled(player->getX(), player->getY() - 15, player->getX() + 15, player->getY(), RGB15(0, 255, 0));
-}
-
-void renderBackground() {
-	glBoxFilled(0, 0, 256, 192, RGB15(50, 0, 0));
-}
-
 bool processInput(Player* player) {
 	scanKeys();
 	int keys = keysHeld();
@@ -49,6 +41,13 @@ bool processInput(Player* player) {
 void vblank() {}
 
 int main(int argc, char** argv){
+
+	// powerOn(PM_BACKLIGHT_TOP);
+	// powerOn(PM_BACKLIGHT_BOTTOM);
+
+	// defaultExceptionHandler();
+	// consoleDemoInit();
+
 	NF_Set2D(0, 0);				// Turn on MODE 0 on the Top Screen
 	NF_SetRootFolder("NITROFS");	// Set the Root Folder
 
@@ -79,38 +78,12 @@ int main(int argc, char** argv){
 		NF_CreateSprite(0, spriteID, 0, 0, player.getX(), player.getY());
 
 		NF_SpriteFrame(0, spriteID, 1);
-		// glBoxFilled(player->getX(), player->getY() - 15, player->getX() + 15, player->getY(), RGB15(0, 255, 0));
 		
 		NF_SpriteOamSet(0);		// Update NFLib's Sprite OAM System
 		swiWaitForVBlank();		// Wait for the Vertical Blank
-		oamUpdate(&oamMain);
+		oamUpdate(&oamMain);    // OAM update the top screen
 		
 	}
-	// // powerOn(PM_BACKLIGHT_TOP);
-	// // powerOn(PM_BACKLIGHT_BOTTOM);
-
-	// defaultExceptionHandler();
-	// consoleDemoInit();
-	// videoSetMode(MODE_5_3D);
-	// // 	videoSetModeSub(MODE_5_2D);
-
-	// irqSet(IRQ_VBLANK, vblank);
-	// srand(time(NULL));
-	// glScreen2D();
-
-	// 
-
-	// while(1) {
-	// 	if(processInput(&player)) break;
-	// 	glBegin2D();
-
-	// 	renderBackground();
-
-	// 	renderPlayer(&player);
-	// 	glEnd2D();
-	// 	glFlush(0);
-	// 	swiWaitForVBlank();
-	// }
 
 	return 0;
 }
