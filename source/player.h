@@ -5,6 +5,8 @@ class Player {
         float y = 50;
         float x = 80;
         bool alive = true;
+        int animFrame = 0;
+        int progressFrame = 0;
 
     public:
         float getY();
@@ -13,5 +15,7 @@ class Player {
         void setAlive(bool alive);
         float getX();
         void setX(float x);
+        int getAnimFrame();
+        void nextFrame();
 };
 #endif
