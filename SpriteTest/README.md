@@ -6,3 +6,9 @@ This example consist of:
 - Using the Arrow Keys to move the second bottom sprite
 
  
+# Build Instructions
+Follow the instructions at https://devkitpro.org/wiki/Getting_Started to install devkitPro. Install it with libnds.
+
+Git clone https://github.com/DeathCamel57/libgl2d_ds and follow the installation instructions.
+
+cd to this directory and run `make` and hope like heck that the build environment works and that it doesn't depend on some obscure Windows 10 thing that I had preinstalled.
