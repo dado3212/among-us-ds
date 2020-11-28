@@ -50,15 +50,13 @@ void vblank() {}
 
 int main(int argc, char** argv){
 	NF_Set2D(0, 0);				// Turn on MODE 0 on the Top Screen
-	
 	NF_SetRootFolder("NITROFS");	// Set the Root Folder
 
 	NF_InitTiledBgBuffers();	// Initialize the Tiled Backgrounds System on the Top Screen
 	NF_InitTiledBgSys(0);
 
-	// Load the Tiled Background
+	// Load the starting tiled background
 	NF_LoadTiledBg("backgrounds/starting", "bg", 256, 256);
-
 	NF_CreateTiledBg(0, 3, "bg");
 	
 	while(1){
