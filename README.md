@@ -14,3 +14,8 @@ Git clone https://github.com/DeathCamel57/libgl2d_ds and follow the installation
 Using the nflib directory from https://github.com/PolyMarsDev/Snake-DS, which should be a compiled version of Nightfox's Lib.
 
 cd to this directory and run `make` and hope like heck that the build environment works and that it doesn't depend on some obscure Windows 10 thing that I had preinstalled.
+
+# Images
+
+For images, they need to be in Indexed mode (Image > Mode > Indexed Color), and then exported as .bmp (forced into 8bit). Then use the GRIT tool in the
+NFLib checkout with Compile_Backgrounds.bat.
