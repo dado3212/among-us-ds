@@ -6,18 +6,62 @@
 #include <vector>
 #include <time.h>
 
+#include "player.h"
 #include "skeld.h"
 
-typedef struct {
-	u16* gfx;
-	int color;
-	int x, y;
-} Sprite;
+int score = 0;
+float speed = 0.3;
+float velocity = 0;
+const float gravityFactor = 0.05;
+const float gravity = 1.5;
+int color = RGB15(0, 255, 0);
 
-void createSquare(Sprite sprite, OamState* screen, int count);
-int speed = 3;
-Sprite spriteTouchDown = {0, ARGB16(1, 55, 12, 55), 10, 10};
-Sprite spriteKeyDown = {0, ARGB16(1, 31, 12, 12), 30, 30};
+// typedef struct {
+// 	u16* gfx;
+// 	int color;
+// 	int x, y;
+// } Sprite;
+
+// void createSquare(Sprite sprite, OamState* screen, int count);
+// int speed = 3;
+// Sprite spriteTouchDown = {0, ARGB16(1, 55, 12, 55), 10, 10};
+// Sprite spriteKeyDown = {0, ARGB16(1, 31, 12, 12), 30, 30};
+
+void processPhysics(Player* player) {
+	float newY = player->getY() + (gravity + velocity);
+	
+	if(newY <= 14.9) {
+		player->setY(15);
+		velocity = -1.5;
+	}else if(newY >= 192) {
+		player->setAlive(false);
+	}else {
+		player->setY(newY);
+	}
+
+	if(velocity != 0) {
+		if(velocity + gravityFactor <= 0) {
+			velocity += gravityFactor;
+		}else {
+			velocity = 0;
+		}
+	}
+}
+
+void renderPlayer(Player* player) {
+	glBoxFilled(80, player->getY() - 15, 86, player->getY(), color);
+}
+
+bool processInput(Player* player) {
+	scanKeys();
+	int keys = keysDown();
+	if(keys & KEY_START) return true;
+	if(player->isAlive()) {
+		if(keys & KEY_A) velocity = -2.5;
+	}else {
+	}
+	return false;
+}
 
 void vblank() {}
 
@@ -29,17 +73,18 @@ int main(int argc, char** argv){
 	srand(time(NULL));
 	glScreen2D();
 
+	Player player;
+
 	while(1) {
 		// if(processInput(&player)) break;
 		glBegin2D();
 
-		glBoxFilled(80, 35, 86, 50, RGB15(0, 255, 0));
-		// renderPlayer(&player);
+		renderPlayer(&player);
 		// checkHitbox(&player, &pipes);
 		// renderPipes(&pipes);
-		// if(player.isAlive()) {
-		// 	processPhysics(&player, &pipes);
-		// }
+		if(player.isAlive()) {
+			processPhysics(&player);
+		}
 		glEnd2D();
 		glFlush(0);
 		swiWaitForVBlank();
