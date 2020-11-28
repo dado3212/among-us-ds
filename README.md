@@ -26,6 +26,7 @@ These Github repositories were a huge help at varying stages of the development 
 https://github.com/Mika-Westphal/FlappyNDS
 https://sourceforge.net/projects/nflib/
 https://github.com/PolyMarsDev/Snake-DS
+https://gbatemp.net/threads/ds-programming-for-newbies.322106/page-8#post-4445495
 
 ## Sprites Thanks To
 https://www.reddit.com/r/AmongUs/comments/ir6nl0/main_player_sprite_sheet_for_those_who_wanted_it/

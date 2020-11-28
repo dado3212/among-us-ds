@@ -48,38 +48,40 @@ int main(int argc, char** argv){
 	// defaultExceptionHandler();
 	// consoleDemoInit();
 
-	NF_Set2D(0, 0);				// Turn on MODE 0 on the Top Screen
+	u8 screenID = 0; // 0 is top, 1 is bottom
+
+	NF_Set2D(screenID, 0);				// Turn on MODE 0 on the Top Screen
 	NF_SetRootFolder("NITROFS");	// Set the Root Folder
 
 	NF_InitTiledBgBuffers();	// Initialize the Tiled Backgrounds System on the Top Screen
-	NF_InitTiledBgSys(0);
+	NF_InitTiledBgSys(screenID);
 
 	// Load the starting tiled background
 	NF_LoadTiledBg("backgrounds/starting", "bg", 256, 256);
-	NF_CreateTiledBg(0, 3, "bg");
+	NF_CreateTiledBg(screenID, 3, "bg");
 
 	NF_InitSpriteBuffers();		// Initialize Sprite Buffers
-	NF_InitSpriteSys(0);		// Initialize Top Screen SpriteSystem
+	NF_InitSpriteSys(screenID);		// Initialize Top Screen SpriteSystem
 
-	NF_LoadSpriteGfx("sprites/Sprite_TicTacToe", 0, 32, 32);	// Load our Sprite for the circle, cross and blank
-	NF_LoadSpritePal("sprites/Sprite_TicTacToe", 0);
+	u8 spriteLoadID= 0;
+	u8 palleteLoadID = 0;
+	NF_LoadSpriteGfx("sprites/Sprite_TicTacToe", spriteLoadID, 32, 32);	// Load our Sprite for the circle, cross and blank
+	NF_LoadSpritePal("sprites/Sprite_TicTacToe", palleteLoadID);
 	
-	NF_VramSpriteGfx(0, 0, 0, false);	// Load the Gfx into VRAM - transfer all Sprites
-	NF_VramSpritePal(0, 0, 0);		// Load the Palette into VRAM
+	NF_VramSpriteGfx(screenID, 0, 0, false);	// Load the Gfx into VRAM - transfer all Sprites
+	NF_VramSpritePal(screenID, 0, 0);		// Load the Palette into VRAM
 
 	u8 spriteID = 0;
-	NF_CreateSprite(0, spriteID, 0, 0, 50, 50);		// Create a Sprite in the designated spot
-	NF_SpriteFrame(0, 3, 0); // Set its Frame to a blank one
+	NF_CreateSprite(screenID, spriteID, spriteLoadID, palleteLoadID, 50, 50);		// Create a Sprite in the designated spot
 
 	Player player;
 	
 	while(1){
 		if(processInput(&player)) break;
-		NF_CreateSprite(0, spriteID, 0, 0, player.getX(), player.getY());
-
-		NF_SpriteFrame(0, spriteID, 1);
+		NF_CreateSprite(screenID, spriteID, spriteLoadID, palleteLoadID, player.getX(), player.getY());
+		NF_SpriteFrame(screenID, spriteID, 1);
 		
-		NF_SpriteOamSet(0);		// Update NFLib's Sprite OAM System
+		NF_SpriteOamSet(screenID);		// Update NFLib's Sprite OAM System
 		swiWaitForVBlank();		// Wait for the Vertical Blank
 		oamUpdate(&oamMain);    // OAM update the top screen
 		
