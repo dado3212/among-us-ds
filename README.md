@@ -31,3 +31,4 @@ https://gbatemp.net/threads/ds-programming-for-newbies.322106/page-8#post-444549
 ## Sprites Thanks To
 https://www.reddit.com/r/AmongUs/comments/ir6nl0/main_player_sprite_sheet_for_those_who_wanted_it/
 https://among-us.fandom.com/wiki/The_Skeld
+https://www.spriters-resource.com/pc_computer/amongus/sheet/139386/
