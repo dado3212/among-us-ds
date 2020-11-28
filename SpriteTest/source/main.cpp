@@ -12,7 +12,6 @@ typedef struct {
 
 void createSquare(Sprite sprite, OamState* screen, int count);
 int speed = 3;
-Sprite spriteTouchUp = {0, ARGB16(1, 55, 12, 55), 10 , 10};
 Sprite spriteTouchDown = {0, ARGB16(1, 55, 12, 55), 10, 10};
 Sprite spriteKeyDown = {0, ARGB16(1, 31, 12, 12), 30, 30};
 
@@ -38,9 +37,8 @@ int main(int argc, char** argv){
 	
 	oamInit(&oamSub, SpriteMapping_1D_128, false);
 
-	spriteTouchUp.gfx = oamAllocateGfx(&oamMain, SpriteSize_16x16, SpriteColorFormat_Bmp);
+	spriteKeyDown.gfx = oamAllocateGfx(&oamMain, SpriteSize_16x16, SpriteColorFormat_Bmp);
 	spriteTouchDown.gfx = oamAllocateGfx(&oamSub, SpriteSize_16x16, SpriteColorFormat_Bmp);
-	spriteKeyDown.gfx = oamAllocateGfx(&oamSub, SpriteSize_16x16, SpriteColorFormat_Bmp);
 
 	while(1){
 
@@ -57,15 +55,12 @@ int main(int argc, char** argv){
 				spriteKeyDown.x -= speed;
 		if(key & KEY_TOUCH) {
 			touchRead(&touch);
-				spriteTouchUp.x = 255 - touch.px;
-				spriteTouchUp.y = 190 - touch.py;
 				spriteTouchDown.x = touch.px;
 				spriteTouchDown.y = touch.py;
 		}
 
-		createSquare(spriteTouchUp, &oamMain, 1);
+		createSquare(spriteKeyDown, &oamMain, 1);
 		createSquare(spriteTouchDown, &oamSub, 2);
-		createSquare(spriteKeyDown, &oamSub, 3);
 
 		swiWaitForVBlank(); // clean the screen
 		oamUpdate(&oamMain); // (sub) updates the oam before so VBlank can update the graphics on screen
