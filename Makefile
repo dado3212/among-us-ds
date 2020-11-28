@@ -69,7 +69,7 @@ BUILD		:=	build
 SOURCES		:=	source
 INCLUDES	:=	include
 DATA		:=	data
-NITRODATA	:=	nitrofiles
+NITRODATA	:=	resources
 
 #---------------------------------------------------------------------------------
 # options for code generation
