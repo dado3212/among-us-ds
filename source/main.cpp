@@ -65,8 +65,8 @@ int main(int argc, char** argv){
 
 	u8 spriteLoadID= 0;
 	u8 palleteLoadID = 0;
-	NF_LoadSpriteGfx("sprites/Sprite_TicTacToe", spriteLoadID, 32, 32);	// Load our Sprite for the circle, cross and blank
-	NF_LoadSpritePal("sprites/Sprite_TicTacToe", palleteLoadID);
+	NF_LoadSpriteGfx("sprites/walking", spriteLoadID, 32, 32);	// Load our Sprite for the circle, cross and blank
+	NF_LoadSpritePal("sprites/walking", palleteLoadID);
 	
 	NF_VramSpriteGfx(screenID, 0, 0, false);	// Load the Gfx into VRAM - transfer all Sprites
 	NF_VramSpritePal(screenID, 0, 0);		// Load the Palette into VRAM
@@ -79,7 +79,7 @@ int main(int argc, char** argv){
 	while(1){
 		if(processInput(&player)) break;
 		NF_CreateSprite(screenID, spriteID, spriteLoadID, palleteLoadID, player.getX(), player.getY());
-		NF_SpriteFrame(screenID, spriteID, 1);
+		NF_SpriteFrame(screenID, spriteID, 0);
 		
 		NF_SpriteOamSet(screenID);		// Update NFLib's Sprite OAM System
 		swiWaitForVBlank();		// Wait for the Vertical Blank
