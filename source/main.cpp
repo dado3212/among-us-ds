@@ -8,7 +8,6 @@
 #include <time.h>
 
 #include "player.h"
-#include "skeld.h"
 
 void renderPlayer(Player* player) {
 	glBoxFilled(player->getX(), player->getY() - 15, player->getX() + 15, player->getY(), RGB15(0, 255, 0));
@@ -50,31 +49,48 @@ bool processInput(Player* player) {
 void vblank() {}
 
 int main(int argc, char** argv){
-	// powerOn(PM_BACKLIGHT_TOP);
-	// powerOn(PM_BACKLIGHT_BOTTOM);
+	NF_Set2D(0, 0);				// Turn on MODE 0 on the Top Screen
+	
+	NF_SetRootFolder("NITROFS");	// Set the Root Folder
 
-	defaultExceptionHandler();
-	consoleDemoInit();
-	videoSetMode(MODE_5_3D);
-	// 	videoSetModeSub(MODE_5_2D);
+	NF_InitTiledBgBuffers();	// Initialize the Tiled Backgrounds System on the Top Screen
+	NF_InitTiledBgSys(0);
 
-	irqSet(IRQ_VBLANK, vblank);
-	srand(time(NULL));
-	glScreen2D();
+	// Load the Tiled Background
+	NF_LoadTiledBg("Background", "Background", 256, 256);
 
-	Player player;
-
-	while(1) {
-		if(processInput(&player)) break;
-		glBegin2D();
-
-		renderBackground();
-
-		renderPlayer(&player);
-		glEnd2D();
-		glFlush(0);
+	NF_CreateTiledBg(0, 3, "Background");
+	
+	while(1){
+	
 		swiWaitForVBlank();
+		
 	}
+	// // powerOn(PM_BACKLIGHT_TOP);
+	// // powerOn(PM_BACKLIGHT_BOTTOM);
+
+	// defaultExceptionHandler();
+	// consoleDemoInit();
+	// videoSetMode(MODE_5_3D);
+	// // 	videoSetModeSub(MODE_5_2D);
+
+	// irqSet(IRQ_VBLANK, vblank);
+	// srand(time(NULL));
+	// glScreen2D();
+
+	// Player player;
+
+	// while(1) {
+	// 	if(processInput(&player)) break;
+	// 	glBegin2D();
+
+	// 	renderBackground();
+
+	// 	renderPlayer(&player);
+	// 	glEnd2D();
+	// 	glFlush(0);
+	// 	swiWaitForVBlank();
+	// }
 
 	return 0;
 }
