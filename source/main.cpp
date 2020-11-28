@@ -49,9 +49,14 @@ bool processInput(Player* player) {
 void vblank() {}
 
 int main(int argc, char** argv){
+	// powerOn(PM_BACKLIGHT_TOP);
+	// powerOn(PM_BACKLIGHT_BOTTOM);
+
 	defaultExceptionHandler();
 	consoleDemoInit();
 	videoSetMode(MODE_5_3D);
+	// 	videoSetModeSub(MODE_5_2D);
+
 	irqSet(IRQ_VBLANK, vblank);
 	srand(time(NULL));
 	glScreen2D();
