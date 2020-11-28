@@ -71,9 +71,16 @@ int main(int argc, char** argv){
 	u8 spriteID = 0;
 	NF_CreateSprite(0, spriteID, 0, 0, 50, 50);		// Create a Sprite in the designated spot
 	NF_SpriteFrame(0, 3, 0); // Set its Frame to a blank one
+
+	Player player;
 	
 	while(1){
+		if(processInput(&player)) break;
+		NF_CreateSprite(0, spriteID, 0, 0, player.getX(), player.getY());
+
 		NF_SpriteFrame(0, spriteID, 1);
+		// glBoxFilled(player->getX(), player->getY() - 15, player->getX() + 15, player->getY(), RGB15(0, 255, 0));
+		
 		NF_SpriteOamSet(0);		// Update NFLib's Sprite OAM System
 		swiWaitForVBlank();		// Wait for the Vertical Blank
 		oamUpdate(&oamMain);
@@ -91,7 +98,7 @@ int main(int argc, char** argv){
 	// srand(time(NULL));
 	// glScreen2D();
 
-	// Player player;
+	// 
 
 	// while(1) {
 	// 	if(processInput(&player)) break;
