@@ -58,10 +58,25 @@ int main(int argc, char** argv){
 	// Load the starting tiled background
 	NF_LoadTiledBg("backgrounds/starting", "bg", 256, 256);
 	NF_CreateTiledBg(0, 3, "bg");
+
+	NF_InitSpriteBuffers();		// Initialize Sprite Buffers
+	NF_InitSpriteSys(0);		// Initialize Top Screen SpriteSystem
+
+	NF_LoadSpriteGfx("sprites/Sprite_TicTacToe", 0, 32, 32);	// Load our Sprite for the circle, cross and blank
+	NF_LoadSpritePal("sprites/Sprite_TicTacToe", 0);
+	
+	NF_VramSpriteGfx(0, 0, 0, false);	// Load the Gfx into VRAM - transfer all Sprites
+	NF_VramSpritePal(0, 0, 0);		// Load the Palette into VRAM
+
+	u8 spriteID = 0;
+	NF_CreateSprite(0, spriteID, 0, 0, 50, 50);		// Create a Sprite in the designated spot
+	NF_SpriteFrame(0, 3, 0); // Set its Frame to a blank one
 	
 	while(1){
-	
-		swiWaitForVBlank();
+		NF_SpriteFrame(0, spriteID, 1);
+		NF_SpriteOamSet(0);		// Update NFLib's Sprite OAM System
+		swiWaitForVBlank();		// Wait for the Vertical Blank
+		oamUpdate(&oamMain);
 		
 	}
 	// // powerOn(PM_BACKLIGHT_TOP);
