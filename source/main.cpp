@@ -1,7 +1,7 @@
 #include <nds.h>
 #include <nds/arm9/input.h>
 #include <gl2d.h>
-#include <nf_lib.h>
+#include "nf_lib.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
