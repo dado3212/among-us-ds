@@ -21,13 +21,13 @@
 #include "basic.h"
 
 
-// Define la variable global NF_ROOTFOLDER
-char NF_ROOTFOLDER[32];
+// Define la variable global ROOTFOLDER
+char ROOTFOLDER[32];
 
 
 
-// Funcion NF_Error();
-void NF_Error(u16 code, const char* text, u32 value) {
+// Funcion Error();
+void Error(u16 code, const char* text, u32 value) {
 
 	consoleDemoInit();		// Inicializa la consola de texto
 	consoleClear();			// Borra la pantalla
@@ -172,13 +172,13 @@ void NF_Error(u16 code, const char* text, u32 value) {
 
 
 
-// Funcion NF_SetRootFolder();
-void NF_SetRootFolder(const char* folder) {
+// Funcion SetRootFolder();
+void SetRootFolder(const char* folder) {
 
 	if (strcmp(folder, "NITROFS") == 0) {	// Si se debe iniciar el modo NitroFS y FAT
 
 		// Define NitroFS como la carpeta inicial
-		sprintf(NF_ROOTFOLDER, "%s", "");
+		sprintf(ROOTFOLDER, "%s", "");
 		// Intenta inicializar NitroFS
 		if(nitroFSInit(NULL)) {
 			// NitroFS ok
@@ -203,7 +203,7 @@ void NF_SetRootFolder(const char* folder) {
 	} else {	// Si se debe iniciar solo la FAT
 
 		// Define la carpeta inicial de la FAT
-		sprintf(NF_ROOTFOLDER, "%s", folder);
+		sprintf(ROOTFOLDER, "%s", folder);
 		// Intenta inicializar la FAT
 		if (fatInitDefault()) {
 			// Si es correcto, cambia al ROOT del FAT
@@ -229,8 +229,8 @@ void NF_SetRootFolder(const char* folder) {
 
 
 
-// Funcion NF_DmaMemCopy();
-void NF_DmaMemCopy(void* destination, const void* source, u32 size) {
+// Funcion DmaMemCopy();
+void DmaMemCopy(void* destination, const void* source, u32 size) {
 
 	// Funcion basada en la documentacion de Coranac
 	// http://www.coranac.com/2009/05/dma-vs-arm9-fight/

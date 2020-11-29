@@ -24,8 +24,8 @@
 
 
 
-// Funcion NF_Set2D();
-void NF_Set2D(u8 screen, u8 mode) {
+// Funcion Set2D();
+void Set2D(u8 screen, u8 mode) {
 
 	if (screen == 0) {		// Pantalla Superior
 
@@ -61,8 +61,8 @@ void NF_Set2D(u8 screen, u8 mode) {
 
 
 
-// Funcion NF_ShowBg();
-void NF_ShowBg(u8 screen, u8 layer) {
+// Funcion ShowBg();
+void ShowBg(u8 screen, u8 layer) {
 
 	if (screen == 0) {		// Pantalla Superior
 
@@ -104,8 +104,8 @@ void NF_ShowBg(u8 screen, u8 layer) {
 
 
 
-// Funcion NF_HideBg();
-void NF_HideBg(u8 screen, u8 layer) {
+// Funcion HideBg();
+void HideBg(u8 screen, u8 layer) {
 
 	if (screen == 0) {		// Pantalla Superior
 
@@ -147,15 +147,15 @@ void NF_HideBg(u8 screen, u8 layer) {
 
 
 
-// Funcion NF_ScrollBg();
-void NF_ScrollBg(u8 screen, u8 layer, s16 x, s16 y) {
+// Funcion ScrollBg();
+void ScrollBg(u8 screen, u8 layer, s16 x, s16 y) {
 
 	// Variables temporales
 	s16 sx = x;
 	s16 sy = y;
 
 	// Si el mapa es infinito... > 512
-	if (NF_TILEDBG_LAYERS[screen][layer].bgtype > 0) {
+	if (TILEDBG_LAYERS[screen][layer].bgtype > 0) {
 
 		// Variables temporales de Fondos infinitos
 		u32 address = 0;		// Puntero a la VRAM
@@ -167,39 +167,39 @@ void NF_ScrollBg(u8 screen, u8 layer, s16 x, s16 y) {
 		
 		// Calcula la direccion base del mapa
 		if (screen == 0) {	// (VRAM_A)
-			address = (0x6000000) + (NF_TILEDBG_LAYERS[screen][layer].mapbase << 11);
+			address = (0x6000000) + (TILEDBG_LAYERS[screen][layer].mapbase << 11);
 		} else {			// (VRAM_C)
-			address = (0x6200000) + (NF_TILEDBG_LAYERS[screen][layer].mapbase << 11);
+			address = (0x6200000) + (TILEDBG_LAYERS[screen][layer].mapbase << 11);
 		}
 
 		// Ajusta el valor maximo de las variables a los limites del scroll
 		if (sx < 0) {
 			sx = 0;
 		}
-		if (sx > (NF_TILEDBG_LAYERS[screen][layer].bgwidth - 256)) {
-			sx = (NF_TILEDBG_LAYERS[screen][layer].bgwidth - 256);
+		if (sx > (TILEDBG_LAYERS[screen][layer].bgwidth - 256)) {
+			sx = (TILEDBG_LAYERS[screen][layer].bgwidth - 256);
 		}
 		if (sy < 0) {
 			sy = 0;
 		}
-		if (sy > (NF_TILEDBG_LAYERS[screen][layer].bgheight - 192)) {
-			sy = (NF_TILEDBG_LAYERS[screen][layer].bgheight - 192);
+		if (sy > (TILEDBG_LAYERS[screen][layer].bgheight - 192)) {
+			sy = (TILEDBG_LAYERS[screen][layer].bgheight - 192);
 		}
 
 		// Segun el tipo de mapa...
-		switch (NF_TILEDBG_LAYERS[screen][layer].bgtype) {
+		switch (TILEDBG_LAYERS[screen][layer].bgtype) {
 
 			case 1:	// 512x256  -  Bloque A y B (32x32) + (32x32) (2kb x 2 = 4kb)
 				// Calcula el bloque
 				blockx = (x >> 8);
 				// Si has cambiado de bloque...
-				if (NF_TILEDBG_LAYERS[screen][layer].blockx != blockx) {
+				if (TILEDBG_LAYERS[screen][layer].blockx != blockx) {
 					// Calcula el desplazamiento de datos
 					mapmovex = (blockx << 11);
 					// Copias los Bloques A y B (32x32) + (32x32) (2kb x 2 = 4kb)
-					NF_DmaMemCopy((void*)address, (NF_BUFFER_BGMAP[NF_TILEDBG_LAYERS[screen][layer].bgslot] + mapmovex), 4096);
+					DmaMemCopy((void*)address, (BUFFER_BGMAP[TILEDBG_LAYERS[screen][layer].bgslot] + mapmovex), 4096);
 					// Y actualiza el bloque actual
-					NF_TILEDBG_LAYERS[screen][layer].blockx = blockx;
+					TILEDBG_LAYERS[screen][layer].blockx = blockx;
 				}
 				// Calcula la X del fondo
 				sx = x - (blockx << 8);
@@ -209,38 +209,38 @@ void NF_ScrollBg(u8 screen, u8 layer, s16 x, s16 y) {
 				// Calcula el bloque
 				blocky = (y >> 8);
 				// Si has cambiado de bloque...
-				if (NF_TILEDBG_LAYERS[screen][layer].blocky != blocky) {
+				if (TILEDBG_LAYERS[screen][layer].blocky != blocky) {
 					// Calcula el desplazamiento de datos
 					mapmovey = (blocky << 11);
 					// Copias los Bloques A y B (32x32) + (32x32) (2kb x 2 = 4kb)
-					NF_DmaMemCopy((void*)address, (NF_BUFFER_BGMAP[NF_TILEDBG_LAYERS[screen][layer].bgslot] + mapmovey), 4096);
+					DmaMemCopy((void*)address, (BUFFER_BGMAP[TILEDBG_LAYERS[screen][layer].bgslot] + mapmovey), 4096);
 					// Y actualiza el bloque actual
-					NF_TILEDBG_LAYERS[screen][layer].blocky = blocky;
+					TILEDBG_LAYERS[screen][layer].blocky = blocky;
 				}
 				// Calcula la X del fondo
 				sy = y - (blocky << 8);
 				break;
 
 			case 3: // >512x>512
-				rowsize = (((((NF_TILEDBG_LAYERS[screen][layer].bgwidth - 1) >> 8)) + 1) << 11);
+				rowsize = (((((TILEDBG_LAYERS[screen][layer].bgwidth - 1) >> 8)) + 1) << 11);
 				// Calcula los bloques
 				blockx = (x >> 8);
 				blocky = (y >> 8);
 				if (	// Si se ha cambiado de bloque en alguna direccion...
-					(NF_TILEDBG_LAYERS[screen][layer].blockx != blockx)
+					(TILEDBG_LAYERS[screen][layer].blockx != blockx)
 					||
-					(NF_TILEDBG_LAYERS[screen][layer].blocky != blocky)
+					(TILEDBG_LAYERS[screen][layer].blocky != blocky)
 					) {
 					// Y el desplazamiento de datos
 					mapmovex = (blocky * rowsize) + (blockx << 11);
 					mapmovey = mapmovex + rowsize;
 					// Bloque A y B (32x32) + (32x32) (2kb x 2 = 4kb)
-					NF_DmaMemCopy((void*)address, (NF_BUFFER_BGMAP[NF_TILEDBG_LAYERS[screen][layer].bgslot] + mapmovex), 4096);
+					DmaMemCopy((void*)address, (BUFFER_BGMAP[TILEDBG_LAYERS[screen][layer].bgslot] + mapmovex), 4096);
 					// Bloque (+4096) C y D (32x32) + (32x32) (2kb x 2 = 4kb)
-					NF_DmaMemCopy((void*)(address + 4096), (NF_BUFFER_BGMAP[NF_TILEDBG_LAYERS[screen][layer].bgslot] + mapmovey), 4096);
+					DmaMemCopy((void*)(address + 4096), (BUFFER_BGMAP[TILEDBG_LAYERS[screen][layer].bgslot] + mapmovey), 4096);
 					// Y actualiza el bloque actual
-					NF_TILEDBG_LAYERS[screen][layer].blockx = blockx;
-					NF_TILEDBG_LAYERS[screen][layer].blocky = blocky;
+					TILEDBG_LAYERS[screen][layer].blockx = blockx;
+					TILEDBG_LAYERS[screen][layer].blocky = blocky;
 				}
 				// Calcula la X e Y del fondo
 				sx = x - (blockx << 8);
@@ -300,85 +300,85 @@ void NF_ScrollBg(u8 screen, u8 layer, s16 x, s16 y) {
 
 
 
-// Funcion NF_MoveSprite();
-void NF_MoveSprite(u8 screen, u8 id, s16 x, s16 y) {
+// Funcion MoveSprite();
+void MoveSprite(u8 screen, u8 id, s16 x, s16 y) {
 
-	NF_SPRITEOAM[screen][id].x = x;		// Coordenada X
-	NF_SPRITEOAM[screen][id].y = y;		// Coordenada Y
-
-}
-
-
-
-// Funcion NF_SpriteLayer();
-void NF_SpriteLayer(u8 screen, u8 id, u8 layer) {
-
-	NF_SPRITEOAM[screen][id].layer = layer;		// Capa sobre la que esta el sprite
+	SPRITEOAM[screen][id].x = x;		// Coordenada X
+	SPRITEOAM[screen][id].y = y;		// Coordenada Y
 
 }
 
 
 
-// Funcion NF_ShowSprite();
-void NF_ShowSprite(u8 screen, u8 id, bool show) {
+// Funcion SpriteLayer();
+void SpriteLayer(u8 screen, u8 id, u8 layer) {
 
-	NF_SPRITEOAM[screen][id].hide = !show;		// Muestra o oculta el sprite
-
-}
-
-
-
-// Funcion NF_HflipSprite();
-void NF_HflipSprite(u8 screen, u8 id, bool hflip) {
-
-	NF_SPRITEOAM[screen][id].hflip = hflip;		// Volteado horizontal;
+	SPRITEOAM[screen][id].layer = layer;		// Capa sobre la que esta el sprite
 
 }
 
 
 
-// Funcion NF_GetSpriteHflip();
-bool NF_GetSpriteHflip(u8 screen, u8 id) {
-	return NF_SPRITEOAM[screen][id].hflip;
-}
+// Funcion ShowSprite();
+void ShowSprite(u8 screen, u8 id, bool show) {
 
-
-
-// Funcion NF_VflipSprite();
-void NF_VflipSprite(u8 screen, u8 id, bool vflip) {
-
-	NF_SPRITEOAM[screen][id].vflip = vflip;		// Volteado vertical;
+	SPRITEOAM[screen][id].hide = !show;		// Muestra o oculta el sprite
 
 }
 
 
 
-// Funcion NF_GetSpriteVflip();
-bool NF_GetSpriteVflip(u8 screen, u8 id) {
-	return NF_SPRITEOAM[screen][id].vflip;
+// Funcion HflipSprite();
+void HflipSprite(u8 screen, u8 id, bool hflip) {
+
+	SPRITEOAM[screen][id].hflip = hflip;		// Volteado horizontal;
+
 }
 
 
 
-// Funcion NF_SpriteFrame();
-void NF_SpriteFrame(u8 screen, u8 id, u16 frame) {
+// Funcion GetSpriteHflip();
+bool GetSpriteHflip(u8 screen, u8 id) {
+	return SPRITEOAM[screen][id].hflip;
+}
+
+
+
+// Funcion VflipSprite();
+void VflipSprite(u8 screen, u8 id, bool vflip) {
+
+	SPRITEOAM[screen][id].vflip = vflip;		// Volteado vertical;
+
+}
+
+
+
+// Funcion GetSpriteVflip();
+bool GetSpriteVflip(u8 screen, u8 id) {
+	return SPRITEOAM[screen][id].vflip;
+}
+
+
+
+// Funcion SpriteFrame();
+void SpriteFrame(u8 screen, u8 id, u16 frame) {
 
 	// Verifica el rango de Id's de Sprites
 	if ((id < 0) || (id > 127)) {
-		NF_Error(106, "Sprite", 127);
+		Error(106, "Sprite", 127);
 	}
 
 	// Verifica el rango de frames del Sprite
-	if (frame > NF_SPRITEOAM[screen][id].lastframe) {
-		NF_Error(106, "Sprite frame", NF_SPRITEOAM[screen][id].lastframe);
+	if (frame > SPRITEOAM[screen][id].lastframe) {
+		Error(106, "Sprite frame", SPRITEOAM[screen][id].lastframe);
 	}
 
 
 	// Verifica si el frame necesita ser actualizado
-	if (NF_SPRITEOAM[screen][id].frame != frame) {
+	if (SPRITEOAM[screen][id].frame != frame) {
 
 		// Si debes de copiar el nuevo frame desde la RAM a la VRAM...
-		if (NF_SPR256VRAM[screen][NF_SPRITEOAM[screen][id].gfxid].keepframes) {
+		if (SPR256VRAM[screen][SPRITEOAM[screen][id].gfxid].keepframes) {
 
 			// Variables temporales
 			char* source;			// Puntero de origen
@@ -386,24 +386,24 @@ void NF_SpriteFrame(u8 screen, u8 id, u16 frame) {
 			u16 ramid = 0;			// Slot de RAM donde se encuentra el Gfx
 
 			// Calcula el origen y destino del nuevo frame a copiar
-			ramid =  NF_SPR256VRAM[screen][NF_SPRITEOAM[screen][id].gfxid].ramid;
-			source = NF_BUFFER_SPR256GFX[ramid] + (NF_SPRITEOAM[screen][id].framesize * frame);
-			destination = NF_SPR256VRAM[screen][NF_SPRITEOAM[screen][id].gfxid].address;
+			ramid =  SPR256VRAM[screen][SPRITEOAM[screen][id].gfxid].ramid;
+			source = BUFFER_SPR256GFX[ramid] + (SPRITEOAM[screen][id].framesize * frame);
+			destination = SPR256VRAM[screen][SPRITEOAM[screen][id].gfxid].address;
 
 			// Copialo
-			NF_DmaMemCopy((void*)destination, source, NF_SPRITEOAM[screen][id].framesize);
+			DmaMemCopy((void*)destination, source, SPRITEOAM[screen][id].framesize);
 
 		} else {	// Si todos los frames ya estan en VRAM...
 
 			// Calcula la direccion del Gfx del frame
 			u32 address = 0;
-			address = NF_SPR256VRAM[screen][NF_SPRITEOAM[screen][id].gfxid].address + (NF_SPRITEOAM[screen][id].framesize * frame);
-			NF_SPRITEOAM[screen][id].gfx = (u32*)address;
+			address = SPR256VRAM[screen][SPRITEOAM[screen][id].gfxid].address + (SPRITEOAM[screen][id].framesize * frame);
+			SPRITEOAM[screen][id].gfx = (u32*)address;
 
 		}
 
 		// Almacena el frame actual
-		NF_SPRITEOAM[screen][id].frame = frame;
+		SPRITEOAM[screen][id].frame = frame;
 
 	}
 
@@ -411,57 +411,57 @@ void NF_SpriteFrame(u8 screen, u8 id, u16 frame) {
 
 
 
-// Funcion NF_EnableSpriteRotScale();
-void NF_EnableSpriteRotScale(u8 screen, u8 sprite, u8 id, bool doublesize) {
+// Funcion EnableSpriteRotScale();
+void EnableSpriteRotScale(u8 screen, u8 sprite, u8 id, bool doublesize) {
 
 	// Verifica el rango de Id's de Sprites
 	if ((sprite < 0) || (sprite > 127)) {
-		NF_Error(106, "Sprite", 127);
+		Error(106, "Sprite", 127);
 	}
 
 	// Verifica el rango de Id's de Rotacion
 	if ((id < 0) || (id > 31)) {
-		NF_Error(106, "RotScale", 127);
+		Error(106, "RotScale", 127);
 	}
 
 	// Verifica si el Sprite esta creado
-	if (!NF_SPRITEOAM[screen][sprite].created) {
+	if (!SPRITEOAM[screen][sprite].created) {
 		char text[3];
 		sprintf(text, "%d", screen);
-		NF_Error(112, text, sprite);
+		Error(112, text, sprite);
 	}
 
-	NF_SPRITEOAM[screen][sprite].rot = id;					// Id de rotacion (-1 ninguno) (0 - 31 Id de rotacion)
-	NF_SPRITEOAM[screen][sprite].doublesize = doublesize;	// Usar el "double size" al rotar ? ("NO" por defecto)
+	SPRITEOAM[screen][sprite].rot = id;					// Id de rotacion (-1 ninguno) (0 - 31 Id de rotacion)
+	SPRITEOAM[screen][sprite].doublesize = doublesize;	// Usar el "double size" al rotar ? ("NO" por defecto)
 
 }
 
 
 
-// Funcion NF_DisableSpriteRotScale();
-void NF_DisableSpriteRotScale(u8 screen, u8 sprite) {
+// Funcion DisableSpriteRotScale();
+void DisableSpriteRotScale(u8 screen, u8 sprite) {
 
 	// Verifica el rango de Id's de Sprites
 	if ((sprite < 0) || (sprite > 127)) {
-		NF_Error(106, "Sprite", 127);
+		Error(106, "Sprite", 127);
 	}
 
 	// Verifica si el Sprite esta creado
-	if (!NF_SPRITEOAM[screen][sprite].created) {
+	if (!SPRITEOAM[screen][sprite].created) {
 		char text[3];
 		sprintf(text, "%d", screen);
-		NF_Error(112, text, sprite);
+		Error(112, text, sprite);
 	}
 
-	NF_SPRITEOAM[screen][sprite].rot = -1;					// Id de rotacion (-1 ninguno) (0 - 31 Id de rotacion)
-	NF_SPRITEOAM[screen][sprite].doublesize = false;		// Usar el "double size" al rotar ? ("NO" por defecto)
+	SPRITEOAM[screen][sprite].rot = -1;					// Id de rotacion (-1 ninguno) (0 - 31 Id de rotacion)
+	SPRITEOAM[screen][sprite].doublesize = false;		// Usar el "double size" al rotar ? ("NO" por defecto)
 
 }
 
 
 
-// Funcion NF_SpriteRotScale();
-void NF_SpriteRotScale(u8 screen, u8 id, s16 angle, u16 sx, u16 sy) {
+// Funcion SpriteRotScale();
+void SpriteRotScale(u8 screen, u8 id, s16 angle, u16 sx, u16 sy) {
 
 	// Variables temporales
 	s16 in = 0;		// Angulo dado

@@ -84,7 +84,7 @@ bool processInput(Player *player, Map* map) {
 
 int main(int argc, char** argv) {
 	// Set the Root Folder (this is black magic)
-	NF_SetRootFolder("NITROFS");
+	SetRootFolder("NITROFS");
 
 	// if (nitroFSInit(NULL)) {
 	// 	// NitroFS ok
@@ -131,36 +131,36 @@ int main(int argc, char** argv) {
 	int screenID = 0;
 
 	// Turn on MODE 0 on the Top Screen
-	NF_Set2D(screenID, 0);
+	Set2D(screenID, 0);
 
 	// Initialize the Tiled Backgrounds System on the Top Screen
-	NF_InitTiledBgBuffers();	
-	NF_InitTiledBgSys(screenID);
+	InitTiledBgBuffers();	
+	InitTiledBgSys(screenID);
 
 	// Initialize Sprite Buffers
-	NF_InitSpriteBuffers();		
-	NF_InitSpriteSys(screenID);
+	InitSpriteBuffers();		
+	InitSpriteSys(screenID);
 
 	swiWaitForVBlank();
 
 	// Load the starting tiled background
-	NF_LoadTiledBg("backgrounds/skeld_13", "skeld_13", 256, 256);
-	NF_CreateTiledBg(screenID, 3, "skeld_13");
+	LoadTiledBg("backgrounds/skeld_13", "skeld_13", 256, 256);
+	CreateTiledBg(screenID, 3, "skeld_13");
 
-	NF_LoadTiledBg("backgrounds/skeld_14", "skeld_14", 256, 256);
-	// NF_CreateTiledBg(1, 3, "skeld_14");
+	LoadTiledBg("backgrounds/skeld_14", "skeld_14", 256, 256);
+	// CreateTiledBg(1, 3, "skeld_14");
 
 	u8 spriteLoadID = 0;
 	u8 palleteLoadID = 0;
-	NF_LoadSpriteGfx("sprites/walking_anim", spriteLoadID, 32, 32);	// Load our Sprite for the circle, cross and blank
-	NF_LoadSpritePal("sprites/walking_anim", palleteLoadID);
+	LoadSpriteGfx("sprites/walking_anim", spriteLoadID, 32, 32);	// Load our Sprite for the circle, cross and blank
+	LoadSpritePal("sprites/walking_anim", palleteLoadID);
 	
-	NF_VramSpriteGfx(screenID, 0, 0, false);	// Load the Gfx into VRAM - transfer all Sprites
-	NF_VramSpritePal(screenID, 0, 0);		// Load the Palette into VRAM
+	VramSpriteGfx(screenID, 0, 0, false);	// Load the Gfx into VRAM - transfer all Sprites
+	VramSpritePal(screenID, 0, 0);		// Load the Palette into VRAM
 
 	u8 spriteID = 0;
 	// Spawn the character in the middle of the screen
-	NF_CreateSprite(screenID, spriteID, spriteLoadID, palleteLoadID, CENTER_X - 32 / 2, CENTER_Y - 32 / 2);
+	CreateSprite(screenID, spriteID, spriteLoadID, palleteLoadID, CENTER_X - 32 / 2, CENTER_Y - 32 / 2);
 
 	Player player;
 	Map map;
@@ -173,12 +173,12 @@ int main(int argc, char** argv) {
 		if (processInput(&player, &map)) {
 			break;
 		}
-		NF_SpriteFrame(screenID, spriteID, player.getAnimFrame());
-		NF_HflipSprite(screenID, spriteID, !player.isFacingRight());
+		SpriteFrame(screenID, spriteID, player.getAnimFrame());
+		HflipSprite(screenID, spriteID, !player.isFacingRight());
 
-		NF_ScrollBg(screenID, 3, map.getX(), map.getY());
+		ScrollBg(screenID, 3, map.getX(), map.getY());
 		
-		NF_SpriteOamSet(screenID);		// Update NFLib's Sprite OAM System
+		SpriteOamSet(screenID);		// Update NFLib's Sprite OAM System
 		swiWaitForVBlank();		// Wait for the Vertical Blank
 		if (screenID == 0) {
 			oamUpdate(&oamMain);    // OAM update the top screen

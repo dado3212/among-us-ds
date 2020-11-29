@@ -2,8 +2,8 @@
 extern "C" {
 #endif
 
-#ifndef __NF_LIB_H__
-#define __NF_LIB_H__
+#ifndef __LIB_H__
+#define __LIB_H__
 
 // Libreria de funciones basicas y comunes
 #include "basic.h"

@@ -2,8 +2,8 @@
 extern "C" {
 #endif
 
-#ifndef __NF_BASIC_H__
-#define __NF_BASIC_H__
+#ifndef __BASIC_H__
+#define __BASIC_H__
 
 
 
@@ -24,13 +24,13 @@ extern "C" {
 
 
 
-// Define la variable global NF_ROOTFOLDER
-extern char NF_ROOTFOLDER[32];
+// Define la variable global ROOTFOLDER
+extern char ROOTFOLDER[32];
 
 
 
-// Funcion NF_Error();
-void NF_Error(u16 code, const char* text, u32 value);
+// Funcion Error();
+void Error(u16 code, const char* text, u32 value);
 // Errores para debug. Detiene el sistema e informa del error
 // 101: Fichero no encontrado
 // 102: Memoria insuficiente
@@ -53,14 +53,14 @@ void NF_Error(u16 code, const char* text, u32 value);
 
 
 
-// Funcion NF_SetRootFolder();
-void NF_SetRootFolder(const char* folder);
+// Funcion SetRootFolder();
+void SetRootFolder(const char* folder);
 // Define el nombre de la carpeta que se usara como "root" si se usa la FAT
 
 
 
-// Funcion NF_DmaMemCopy();
-void NF_DmaMemCopy(void* destination, const void* source, u32 size);
+// Funcion DmaMemCopy();
+void DmaMemCopy(void* destination, const void* source, u32 size);
 // Copia un bloque de memoria usando DMA (canal 3, halfwords) y vaciando previamente
 // el cache. Con pruebas de bloques grandes (64kb o 128kb) he observado que memcpy(); 
 // sigue siendo mas rapida.
