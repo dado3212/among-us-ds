@@ -3,22 +3,6 @@
 #define WALK_ANIM_RATE 3 // Update the walk animation every 3 movements
 #define WALK_FRAME_COUNT 12 // Number of walk frames
 
-float Player::getY() {
-    return this->y;
-}
-
-float Player::getX() {
-    return this->x;
-}
-
-void Player::setY(float y) {
-    this->y = y;
-}
-
-void Player::setX(float x) {
-    this->x = x;
-}
-
 int Player::getAnimFrame() {
     return this->animFrame;
 }

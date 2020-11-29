@@ -10,57 +10,27 @@
 #include "player.h"
 #include "map.h"
 
-bool processInput(Player* player) {
+void processInput(Player *player, Map* map) {
 	scanKeys();
 	int keys = keysHeld();
 	bool moving = false;
 	if(keys & KEY_UP) {
 		moving = true;
-		player->setY(player->getY() - 2);
+		map->setY(map->getY() - 2);
 	}
 	if(keys & KEY_DOWN) {
 		moving = true;
-		player->setY(player->getY() + 2);
+		map->setY(map->getY() + 2);
 	}
 	if(keys & KEY_RIGHT) {
 		moving = true;
-		player->setX(player->getX() + 2);
+		map->setX(map->getX() + 2);
 		player->setFacingRight(true);
 	}
 	if(keys & KEY_LEFT) {
 		moving = true;
-		player->setX(player->getX() - 2);
-		player->setFacingRight(false);
-	}
-	if (keys & KEY_START) {
-		return true;
-	}
-	if (keys & KEY_TOUCH) {
-		touchPosition touch;
-		touchRead(&touch);
-		player->setX(touch.px);
-		player->setY(touch.py);
-	}
-	player->nextFrame(moving);
-	// KEY_A
-	// KEY_START
-	return false;
-}
-
-void processInput2(Map* map) {
-	scanKeys();
-	int keys = keysHeld();
-	if(keys & KEY_UP) {
-		map->setY(map->getY() - 2);
-	}
-	if(keys & KEY_DOWN) {
-		map->setY(map->getY() + 2);
-	}
-	if(keys & KEY_RIGHT) {
-		map->setX(map->getX() + 2);
-	}
-	if(keys & KEY_LEFT) {
 		map->setX(map->getX() - 2);
+		player->setFacingRight(false);
 	}
 	// if (keys & KEY_TOUCH) {
 	// 	touchPosition touch;
@@ -68,13 +38,11 @@ void processInput2(Map* map) {
 	// 	player->setX(touch.px);
 	// 	player->setY(touch.py);
 	// }
-	// player->nextFrame(moving);
+	player->nextFrame(moving);
 	// KEY_A
 	// KEY_START
 	// return false;
 }
-
-void vblank() {}
 
 int main(int argc, char** argv){
 
@@ -110,17 +78,16 @@ int main(int argc, char** argv){
 	NF_VramSpritePal(screenID, 0, 0);		// Load the Palette into VRAM
 
 	u8 spriteID = 0;
-	NF_CreateSprite(screenID, spriteID, spriteLoadID, palleteLoadID, 50, 50);		// Create a Sprite in the designated spot
+	NF_CreateSprite(screenID, spriteID, spriteLoadID, palleteLoadID, 256 / 2 - 32 / 2, 192 / 2 - 32 / 2);		// Create a Sprite in the designated spot
 
 	Player player;
 	Map map;
 	
-	while(1){
-		if(processInput(&player)) break;
-		NF_CreateSprite(screenID, spriteID, spriteLoadID, palleteLoadID, player.getX(), player.getY());
+	while(1) {
+		processInput(&player, &map);
+		// NF_CreateSprite(screenID, spriteID, spriteLoadID, palleteLoadID, player.getX(), player.getY());
 		NF_SpriteFrame(screenID, spriteID, player.getAnimFrame());
 		NF_HflipSprite(screenID, spriteID, !player.isFacingRight());
-		processInput2(&map);
 
 		NF_ScrollBg(screenID, 3, map.getX(), map.getY());
 		
