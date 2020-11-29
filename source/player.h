@@ -16,6 +16,6 @@ class Player {
         float getX();
         void setX(float x);
         int getAnimFrame();
-        void nextFrame();
+        void nextFrame(bool moving);
 };
 #endif

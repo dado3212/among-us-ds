@@ -38,9 +38,7 @@ bool processInput(Player* player) {
 		player->setX(touch.px);
 		player->setY(touch.py);
 	}
-	if (moving) {
-		player->nextFrame();
-	}
+	player->nextFrame(moving);
 	// KEY_A
 	// KEY_START
 	return false;
