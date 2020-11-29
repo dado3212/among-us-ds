@@ -83,9 +83,9 @@ bool processInput(Player *player, Map* map) {
 int initializeGame(int screenID) {
 	if (screenID == 0) {
 		powerOn(PM_BACKLIGHT_TOP);
-		powerOff(PM_BACKLIGHT_BOTTOM);
+		// powerOff(PM_BACKLIGHT_BOTTOM);
 	} else {
-		powerOff(PM_BACKLIGHT_TOP);
+		// powerOff(PM_BACKLIGHT_TOP);
 		powerOn(PM_BACKLIGHT_BOTTOM);
 	}
 
@@ -101,7 +101,7 @@ int initializeGame(int screenID) {
 	NF_InitSpriteSys(screenID);
 
 	// Load the starting tiled background
-	NF_LoadTiledBg("backgrounds/starting", "bg", 256, 256);
+	NF_LoadTiledBg("backgrounds/skeld_13", "bg", 256, 256);
 	NF_CreateTiledBg(screenID, 3, "bg");
 
 	u8 spriteLoadID = 0;
@@ -118,6 +118,10 @@ int initializeGame(int screenID) {
 
 	Player player;
 	Map map;
+
+	consoleDemoInit();
+	std::vector<std::string> backgrounds = map.getBackgrounds();
+	iprintf("%s, %s, %s, %s\n", backgrounds[0].c_str(), backgrounds[1].c_str(), backgrounds[2].c_str(), backgrounds[3].c_str());
 	
 	while(1) {
 		if (processInput(&player, &map)) {
@@ -153,7 +157,7 @@ int main(int argc, char** argv) {
 	NF_LoadRawSound("sounds/background", backgroundMusic, 22050, 0);
 	NF_PlayRawSound(
 		backgroundMusic,
-		127, // volume (0-127)
+		0, // volume (0-127) // MUTED, REMOVE THIS
 		64, // pan (0-64-127)
 		true, // loop?
 		0 // loop start point

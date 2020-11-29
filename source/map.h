@@ -1,9 +1,14 @@
 #ifndef MAP_H
 #define MAP_H
+
+#include <string>
+#include <vector>
+
 class Map {
     private:
-        float y = 0;
-        float x = 0;
+        float x = 896;
+        float y = 384;
+        std::string mapName = "skeld";
 
     public:
         float getY();
@@ -11,5 +16,6 @@ class Map {
 
         float getX();
         void setX(float x);
+        std::vector<std::string> getBackgrounds();
 };
 #endif
