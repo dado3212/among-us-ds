@@ -14,20 +14,20 @@ void processInput(Player *player, Map* map) {
 	scanKeys();
 	int keys = keysHeld();
 	bool moving = false;
-	if(keys & KEY_UP) {
+	if (keys & KEY_UP) {
 		moving = true;
 		map->setY(map->getY() - 2);
 	}
-	if(keys & KEY_DOWN) {
+	if (keys & KEY_DOWN) {
 		moving = true;
 		map->setY(map->getY() + 2);
 	}
-	if(keys & KEY_RIGHT) {
+	if (keys & KEY_RIGHT) {
 		moving = true;
 		map->setX(map->getX() + 2);
 		player->setFacingRight(true);
 	}
-	if(keys & KEY_LEFT) {
+	if (keys & KEY_LEFT) {
 		moving = true;
 		map->setX(map->getX() - 2);
 		player->setFacingRight(false);
@@ -41,21 +41,18 @@ void processInput(Player *player, Map* map) {
 	player->nextFrame(moving);
 	// KEY_A
 	// KEY_START
-	// return false;
 }
 
 int main(int argc, char** argv){
 
-	// powerOn(PM_BACKLIGHT_TOP);
-	// powerOn(PM_BACKLIGHT_BOTTOM);
-
-	// defaultExceptionHandler();
-	// consoleDemoInit();
+	powerOff(PM_BACKLIGHT_BOTTOM);
 
 	u8 screenID = 0; // 0 is top, 1 is bottom
 
-	NF_Set2D(screenID, 0);				// Turn on MODE 0 on the Top Screen
-	NF_SetRootFolder("NITROFS");	// Set the Root Folder
+	// Turn on MODE 0 on the Top Screen
+	NF_Set2D(screenID, 0);
+	// Set the Root Folder (this is black magic)
+	NF_SetRootFolder("NITROFS");
 
 	// Initialize the Tiled Backgrounds System on the Top Screen
 	NF_InitTiledBgBuffers();	
@@ -78,14 +75,14 @@ int main(int argc, char** argv){
 	NF_VramSpritePal(screenID, 0, 0);		// Load the Palette into VRAM
 
 	u8 spriteID = 0;
-	NF_CreateSprite(screenID, spriteID, spriteLoadID, palleteLoadID, 256 / 2 - 32 / 2, 192 / 2 - 32 / 2);		// Create a Sprite in the designated spot
+	// Spawn the character in the middle of the screen
+	NF_CreateSprite(screenID, spriteID, spriteLoadID, palleteLoadID, 256 / 2 - 32 / 2, 192 / 2 - 32 / 2);
 
 	Player player;
 	Map map;
 	
 	while(1) {
 		processInput(&player, &map);
-		// NF_CreateSprite(screenID, spriteID, spriteLoadID, palleteLoadID, player.getX(), player.getY());
 		NF_SpriteFrame(screenID, spriteID, player.getAnimFrame());
 		NF_HflipSprite(screenID, spriteID, !player.isFacingRight());
 
