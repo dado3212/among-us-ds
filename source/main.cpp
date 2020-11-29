@@ -66,11 +66,14 @@ void processInput(Player *player, Map* map) {
 	// KEY_START
 }
 
-int main(int argc, char** argv){
-
-	powerOff(PM_BACKLIGHT_BOTTOM);
-
-	u8 screenID = 0; // 0 is top, 1 is bottom
+int initializeGame(int screenID) {
+	if (screenID == 0) {
+		powerOn(PM_BACKLIGHT_TOP);
+		powerOff(PM_BACKLIGHT_BOTTOM);
+	} else {
+		powerOff(PM_BACKLIGHT_TOP);
+		powerOn(PM_BACKLIGHT_BOTTOM);
+	}
 
 	// Turn on MODE 0 on the Top Screen
 	NF_Set2D(screenID, 0);
@@ -113,8 +116,17 @@ int main(int argc, char** argv){
 		
 		NF_SpriteOamSet(screenID);		// Update NFLib's Sprite OAM System
 		swiWaitForVBlank();		// Wait for the Vertical Blank
-		oamUpdate(&oamMain);    // OAM update the top screen
+		if (screenID == 0) {
+			oamUpdate(&oamMain);    // OAM update the top screen
+		} else {
+			oamUpdate(&oamSub);    // OAM update the bottom screen
+		}
 	}
 
 	return 0;
+}
+
+int main(int argc, char** argv){
+	// 0 for top screen, 1 for bottom screen
+	return initializeGame(1);
 }
