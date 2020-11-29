@@ -8,6 +8,7 @@
 #include <time.h>
 
 #include "player.h"
+#include "map.h"
 
 bool processInput(Player* player) {
 	scanKeys();
@@ -46,6 +47,33 @@ bool processInput(Player* player) {
 	return false;
 }
 
+void processInput2(Map* map) {
+	scanKeys();
+	int keys = keysHeld();
+	if(keys & KEY_UP) {
+		map->setY(map->getY() - 2);
+	}
+	if(keys & KEY_DOWN) {
+		map->setY(map->getY() + 2);
+	}
+	if(keys & KEY_RIGHT) {
+		map->setX(map->getX() + 2);
+	}
+	if(keys & KEY_LEFT) {
+		map->setX(map->getX() - 2);
+	}
+	// if (keys & KEY_TOUCH) {
+	// 	touchPosition touch;
+	// 	touchRead(&touch);
+	// 	player->setX(touch.px);
+	// 	player->setY(touch.py);
+	// }
+	// player->nextFrame(moving);
+	// KEY_A
+	// KEY_START
+	// return false;
+}
+
 void vblank() {}
 
 int main(int argc, char** argv){
@@ -61,15 +89,17 @@ int main(int argc, char** argv){
 	NF_Set2D(screenID, 0);				// Turn on MODE 0 on the Top Screen
 	NF_SetRootFolder("NITROFS");	// Set the Root Folder
 
-	NF_InitTiledBgBuffers();	// Initialize the Tiled Backgrounds System on the Top Screen
+	// Initialize the Tiled Backgrounds System on the Top Screen
+	NF_InitTiledBgBuffers();	
 	NF_InitTiledBgSys(screenID);
+
+	// Initialize Sprite Buffers
+	NF_InitSpriteBuffers();		
+	NF_InitSpriteSys(screenID);
 
 	// Load the starting tiled background
 	NF_LoadTiledBg("backgrounds/starting", "bg", 256, 256);
 	NF_CreateTiledBg(screenID, 3, "bg");
-
-	NF_InitSpriteBuffers();		// Initialize Sprite Buffers
-	NF_InitSpriteSys(screenID);		// Initialize Top Screen SpriteSystem
 
 	u8 spriteLoadID= 0;
 	u8 palleteLoadID = 0;
@@ -83,17 +113,20 @@ int main(int argc, char** argv){
 	NF_CreateSprite(screenID, spriteID, spriteLoadID, palleteLoadID, 50, 50);		// Create a Sprite in the designated spot
 
 	Player player;
+	Map map;
 	
 	while(1){
 		if(processInput(&player)) break;
 		NF_CreateSprite(screenID, spriteID, spriteLoadID, palleteLoadID, player.getX(), player.getY());
 		NF_SpriteFrame(screenID, spriteID, player.getAnimFrame());
 		NF_HflipSprite(screenID, spriteID, !player.isFacingRight());
+		processInput2(&map);
+
+		NF_ScrollBg(screenID, 3, map.getX(), map.getY());
 		
 		NF_SpriteOamSet(screenID);		// Update NFLib's Sprite OAM System
 		swiWaitForVBlank();		// Wait for the Vertical Blank
 		oamUpdate(&oamMain);    // OAM update the top screen
-		
 	}
 
 	return 0;
