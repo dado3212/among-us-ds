@@ -24,10 +24,12 @@ bool processInput(Player* player) {
 	if(keys & KEY_RIGHT) {
 		moving = true;
 		player->setX(player->getX() + 2);
+		player->setFacingRight(true);
 	}
 	if(keys & KEY_LEFT) {
 		moving = true;
 		player->setX(player->getX() - 2);
+		player->setFacingRight(false);
 	}
 	if (keys & KEY_START) {
 		return true;
@@ -86,6 +88,7 @@ int main(int argc, char** argv){
 		if(processInput(&player)) break;
 		NF_CreateSprite(screenID, spriteID, spriteLoadID, palleteLoadID, player.getX(), player.getY());
 		NF_SpriteFrame(screenID, spriteID, player.getAnimFrame());
+		NF_HflipSprite(screenID, spriteID, !player.isFacingRight());
 		
 		NF_SpriteOamSet(screenID);		// Update NFLib's Sprite OAM System
 		swiWaitForVBlank();		// Wait for the Vertical Blank
