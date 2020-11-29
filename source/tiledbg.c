@@ -20,9 +20,9 @@
 #include <unistd.h>
 
 // Includes propios
-#include "nf_basic.h"
-#include "nf_2d.h"
-#include "nf_tiledbg.h"
+#include "basic.h"
+#include "2d.h"
+#include "tiledbg.h"
 
 
 

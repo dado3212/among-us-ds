@@ -15,9 +15,9 @@
 #include <string.h>
 
 // Includes propios
-#include "nf_basic.h"
-#include "nf_3d.h"
-#include "nf_2d.h"
+#include "basic.h"
+#include "3d.h"
+#include "2d.h"
 
 
 
@@ -56,7 +56,7 @@ void NF_InitOpenGL(void) {
 	// Inicializa el OpenGL de Libnds
 	glInit();
 
-	// Define el tamaño de la ventana 3D (toda la pantalla)
+	// Define el tamaï¿½o de la ventana 3D (toda la pantalla)
 	glViewport(0, 0, 255, 191);
 
 	// Configura la matriz de proyeccion
@@ -96,7 +96,7 @@ u16 NF_GetTextureSize(u16 textel) {
 	// Variables
 	u16 size = 0;
 
-	// Devuelve el tamaño del textel, segun su base2
+	// Devuelve el tamaï¿½o del textel, segun su base2
 	switch (textel) {
 		case 8:
 			size = 0;

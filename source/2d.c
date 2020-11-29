@@ -15,10 +15,10 @@
 #include <string.h>
 
 // Includes propios
-#include "nf_basic.h"
-#include "nf_2d.h"
-#include "nf_tiledbg.h"
-#include "nf_sprite256.h"
+#include "basic.h"
+#include "2d.h"
+#include "tiledbg.h"
+#include "sprite256.h"
 
 
 
@@ -159,7 +159,7 @@ void NF_ScrollBg(u8 screen, u8 layer, s16 x, s16 y) {
 
 		// Variables temporales de Fondos infinitos
 		u32 address = 0;		// Puntero a la VRAM
-		u16 blockx = 0;		// Nº de bloque en pantalla
+		u16 blockx = 0;		// Nï¿½ de bloque en pantalla
 		u16 blocky = 0;
 		u32 mapmovex = 0;	// Desplazamiento de la copia de datos (block x 2048)
 		u32 mapmovey = 0;

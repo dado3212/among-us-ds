@@ -1,13 +1,13 @@
 #include <nds.h>
 #include <nds/arm9/input.h>
 #include <gl2d.h>
-#include "nf_lib.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
 #include <cmath>
 #include <time.h>
 
+#include "lib.h"
 #include "player.h"
 #include "map.h"
 #include "sound.h"

@@ -18,8 +18,8 @@
 #include <unistd.h>
 
 // Includes propios
-#include "nf_basic.h"
-#include "nf_colision.h"
+#include "basic.h"
+#include "colision.h"
 
 
 
@@ -35,7 +35,7 @@ void NF_InitCmapBuffers(void) {
 	for (n = 0; n < NF_SLOTS_CMAP; n ++) {
 		NF_CMAP[n].tiles = NULL;		// Inicializa los punteros de los buffers
 		NF_CMAP[n].map = NULL;
-		NF_CMAP[n].tiles_size = 0;		// Tamaño de archivo
+		NF_CMAP[n].tiles_size = 0;		// Tamaï¿½o de archivo
 		NF_CMAP[n].map_size = 0;
 		NF_CMAP[n].width = 0;			// Ancho del mapa
 		NF_CMAP[n].height = 0;			// Alto del mapa
@@ -84,7 +84,7 @@ void NF_LoadColisionMap(const char* file, u8 id, u16 width, u16 height) {
 	sprintf(filename, "%s/%s.cmp", NF_ROOTFOLDER, file);
 	file_id = fopen(filename, "rb");
 	if (file_id) {	// Si el archivo existe...
-		// Obten el tamaño del archivo
+		// Obten el tamaï¿½o del archivo
 		fseek(file_id, 0, SEEK_END);
 		NF_CMAP[id].map_size = ftell(file_id);
 		rewind(file_id);
@@ -160,7 +160,7 @@ u16 NF_GetTile(u8 slot, s32 x, s32 y) {
 		u16 tile_x = (x >> 3);
 		u16 tile_y = (y >> 3) + 1;		// +1, por que la primera fila se reserva para la referencia de tiles
 
-		// Calcula el nº de tile
+		// Calcula el nï¿½ de tile
 		u32 address = (((tile_y * columns) + tile_x) << 1);
 
 		// Obten los bytes
@@ -197,9 +197,9 @@ void NF_SetTile(u8 slot, s32 x, s32 y, u16 value) {
 		u16 tile_x = (x >> 3);
 		u16 tile_y = (y >> 3) + 1;		// +1, por que la primera fila se reserva para la referencia de tiles
 
-		// Calcula el nº de tile
+		// Calcula el nï¿½ de tile
 		u32 address = (((tile_y * columns) + tile_x) << 1);
-		// nº de tile x2, dado que el mapa es de 16 bits (2 bytes por dato) y el buffer
+		// nï¿½ de tile x2, dado que el mapa es de 16 bits (2 bytes por dato) y el buffer
 		// es de 8 bits, se lee el 2do byte, por eso se multiplica por 2.
 
 		// Calcula los valores de los bytes
@@ -245,7 +245,7 @@ void NF_LoadColisionBg(const char* file, u8 id, u16 width, u16 height) {
 	sprintf(filename, "%s/%s.dat", NF_ROOTFOLDER, file);
 	file_id = fopen(filename, "rb");
 	if (file_id) {	// Si el archivo existe...
-		// Obten el tamaño del archivo
+		// Obten el tamaï¿½o del archivo
 		fseek(file_id, 0, SEEK_END);
 		NF_CMAP[id].tiles_size = ftell(file_id);
 		rewind(file_id);
@@ -265,7 +265,7 @@ void NF_LoadColisionBg(const char* file, u8 id, u16 width, u16 height) {
 	sprintf(filename, "%s/%s.cmp", NF_ROOTFOLDER, file);
 	file_id = fopen(filename, "rb");
 	if (file_id) {	// Si el archivo existe...
-		// Obten el tamaño del archivo
+		// Obten el tamaï¿½o del archivo
 		fseek(file_id, 0, SEEK_END);
 		NF_CMAP[id].map_size = ftell(file_id);
 		rewind(file_id);

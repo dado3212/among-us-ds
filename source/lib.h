@@ -59,46 +59,46 @@ b = (3 << 11);
 
 
 // Definiciones comunes
-#include "nf_defines.h"
+#include "defines.h"
 
 // Libreria de funciones basicas y comunes
-#include "nf_basic.h"
+#include "basic.h"
 
 // Libreria de funciones 2D comunes
-#include "nf_2d.h"
+#include "2d.h"
 
 // Libreria de fondos con Tiles
-#include "nf_tiledbg.h"
+#include "tiledbg.h"
 
 // Libreria de fondos Affine
-#include "nf_affinebg.h"
+#include "affinebg.h"
 
 // Libreria de fondos en modo Bitmap
-#include "nf_bitmapbg.h"
+#include "bitmapbg.h"
 
 // Libreria de fondos en modo mixto (Tiled / Bitmap 8 bits)
-#include "nf_mixedbg.h"
+#include "mixedbg.h"
 
 // Libreria de sprites de 256 colores
-#include "nf_sprite256.h"
+#include "sprite256.h"
 
 // Libreria de textos
-#include "nf_text.h"
+#include "text.h"
 
 // Libreria de textos de 16 pixeles
-#include "nf_text16.h"
+#include "text16.h"
 
 // Libreria de colisiones
-#include "nf_colision.h"
+#include "colision.h"
 
 // Libreria de archivos multimedia
-#include "nf_media.h"
+#include "media.h"
 
 // Libreria 3D, funciones comunes
-#include "nf_3d.h"
+#include "3d.h"
 
 // Libreria 3D, Sprites
-#include "nf_sprite3d.h"
+#include "sprite3d.h"
 
 
 
