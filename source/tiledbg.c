@@ -206,7 +206,7 @@ void LoadTiledBg(const char* file, const char* name, u16 width, u16 height) {
 	char filename[256];
 
 	// Carga el archivo .IMG
-	sprintf(filename, "%s/%s.img", ROOTFOLDER, file);
+	sprintf(filename, "/%s.img", file);
 	file_id = fopen(filename, "rb");
 	if (file_id) {	// Si el archivo existe...
 		// Obten el tama�o del archivo
@@ -226,7 +226,7 @@ void LoadTiledBg(const char* file, const char* name, u16 width, u16 height) {
 	fclose(file_id);		// Cierra el archivo
 
 	// Carga el archivo .MAP
-	sprintf(filename, "%s/%s.map", ROOTFOLDER, file);
+	sprintf(filename, "/%s.map", file);
 	file_id = fopen(filename, "rb");
 	if (file_id) {	// Si el archivo existe...
 		// Obten el tama�o del archivo
@@ -246,7 +246,7 @@ void LoadTiledBg(const char* file, const char* name, u16 width, u16 height) {
 	fclose(file_id);		// Cierra el archivo
 
 	// Carga el archivo .PAL
-	sprintf(filename, "%s/%s.pal", ROOTFOLDER, file);
+	sprintf(filename, "/%s.pal", file);
 	file_id = fopen(filename, "rb");
 	if (file_id) {	// Si el archivo existe...
 		// Obten el tama�o del archivo
@@ -321,7 +321,7 @@ void LoadTilesForBg(const char* file, const char* name, u16 width, u16 height, u
 	char filename[256];
 
 	// Carga el archivo .IMG
-	sprintf(filename, "%s/%s.img", ROOTFOLDER, file);
+	sprintf(filename, "/%s.img", file);
 	file_id = fopen(filename, "rb");
 	if (file_id) {	// Si el archivo existe...
 		// Obten el tama�o del archivo
@@ -362,7 +362,7 @@ void LoadTilesForBg(const char* file, const char* name, u16 width, u16 height, u
 
 
 	// Carga el archivo .PAL
-	sprintf(filename, "%s/%s.pal", ROOTFOLDER, file);
+	sprintf(filename, "/%s.pal", file);
 	file_id = fopen(filename, "rb");
 	if (file_id) {	// Si el archivo existe...
 		// Obten el tama�o del archivo
@@ -1122,7 +1122,7 @@ void LoadExBgPal(const char* file, u8 slot) {
 	char filename[256];
 
 	// Carga el archivo .PAL
-	sprintf(filename, "%s/%s.pal", ROOTFOLDER, file);
+	sprintf(filename, "/%s.pal", file);
 	file_id = fopen(filename, "rb");
 	if (file_id) {	// Si el archivo existe...
 		// Obten el tama�o del archivo

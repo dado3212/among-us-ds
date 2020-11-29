@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
+#include <filesystem.h>
+#include <fat.h>
 #include <cmath>
 #include <time.h>
 
@@ -83,16 +85,13 @@ bool processInput(Player *player, Map* map) {
 }
 
 int main(int argc, char** argv) {
-	// Set the Root Folder (this is black magic)
-	SetRootFolder("NITROFS");
-
-	// if (nitroFSInit(NULL)) {
-	// 	// NitroFS ok
-	// 	// Si es correcto, cambia al ROOT del NitroFS
-	// 	chdir("nitro:/");
-	// } else {
-	// 	throwError("Failed to load NitroFS directory. Your ROM flashcard is probably set up differently.");
-	// }
+	if (nitroFSInit(NULL)) {
+		// NitroFS ok
+		// Si es correcto, cambia al ROOT del NitroFS
+		chdir("nitro:/");
+	} else {
+		throwError("Failed to load NitroFS directory. Your ROM flashcard is probably set up differently.");
+	}
 
 	// Initialize sound
 	soundEnable();

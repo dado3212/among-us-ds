@@ -20,15 +20,6 @@ extern "C" {
 // Includes devKitPro
 #include <nds.h>
 
-
-
-
-
-// Define la variable global ROOTFOLDER
-extern char ROOTFOLDER[32];
-
-
-
 // Funcion Error();
 void Error(u16 code, const char* text, u32 value);
 // Errores para debug. Detiene el sistema e informa del error
@@ -50,14 +41,6 @@ void Error(u16 code, const char* text, u32 value);
 // 116:	Archivo demasiado grande
 // 117: Medidas del fondo affine incorrectas
 // 118: Capa de creacion del fondo affine incorrecta
-
-
-
-// Funcion SetRootFolder();
-void SetRootFolder(const char* folder);
-// Define el nombre de la carpeta que se usara como "root" si se usa la FAT
-
-
 
 // Funcion DmaMemCopy();
 void DmaMemCopy(void* destination, const void* source, u32 size);

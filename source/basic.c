@@ -20,12 +20,6 @@
 // Includes propios
 #include "basic.h"
 
-
-// Define la variable global ROOTFOLDER
-char ROOTFOLDER[32];
-
-
-
 // Funcion Error();
 void Error(u16 code, const char* text, u32 value) {
 
@@ -169,63 +163,6 @@ void Error(u16 code, const char* text, u32 value) {
 	}
 
 }
-
-
-
-// Funcion SetRootFolder();
-void SetRootFolder(const char* folder) {
-
-	if (strcmp(folder, "NITROFS") == 0) {	// Si se debe iniciar el modo NitroFS y FAT
-
-		// Define NitroFS como la carpeta inicial
-		sprintf(ROOTFOLDER, "%s", "");
-		// Intenta inicializar NitroFS
-		if(nitroFSInit(NULL)) {
-			// NitroFS ok
-			// Si es correcto, cambia al ROOT del NitroFS
-			chdir("nitro:/");
-		} else {
-			// Fallo. Deten el programa
-			consoleDemoInit();	// Inicializa la consola de texto
-			iprintf("NitroFS Init Error.\n");
-			iprintf("Abnormal termination.\n\n");
-			iprintf("Check if your flashcard is\n");
-			iprintf("Argv compatible.\n");
-			iprintf("If not, try to launch the ROM\n");
-			iprintf("using the Homebrew Menu.\n\n");
-			iprintf("http://sourceforge.net/projects/devkitpro/files/hbmenu/");
-			// Bucle infinito. Fin del programa
-			while(1) {
-				swiWaitForVBlank();
-			}
-		}
-
-	} else {	// Si se debe iniciar solo la FAT
-
-		// Define la carpeta inicial de la FAT
-		sprintf(ROOTFOLDER, "%s", folder);
-		// Intenta inicializar la FAT
-		if (fatInitDefault()) {
-			// Si es correcto, cambia al ROOT del FAT
-			chdir("fat:/");
-		} else {
-			// Fallo. Deten el programa
-			consoleDemoInit();	// Inicializa la consola de texto
-			iprintf("FAT Init Error.\n");
-			iprintf("Abnormal termination.\n\n");
-			iprintf("Check if your flashcard is\n");
-			iprintf("DLDI compatible and the ROM\n");
-			iprintf("is correctly patched.\n");
-			// Bucle infinito. Fin del programa
-			while(1) {
-				swiWaitForVBlank();
-			}
-		}
-
-	}
-
-}
-
 
 
 
