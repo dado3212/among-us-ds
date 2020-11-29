@@ -6,7 +6,7 @@
 
 #include "errors.h"
 
-void throwError(const char* text) {
+[[ noreturn ]] void throwError(const char* text) {
     // Prepare bottom screen for throwing up text
 	consoleDemoInit();
 	consoleClear();

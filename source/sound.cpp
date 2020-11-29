@@ -1,10 +1,6 @@
 #include <nds.h>
-#include <filesystem.h>
-#include <fat.h>
 
 #include <stdio.h>
-#include <string.h>
-#include <unistd.h>
 
 #include "errors.h"
 #include "sound.h"
