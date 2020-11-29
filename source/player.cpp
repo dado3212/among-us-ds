@@ -14,9 +14,8 @@ void Player::nextFrame(bool moving) {
         }
         this->progressFrame += 1;
     } else {
-        // Most stationary frame, this should probably be frame 12 or something with a real stand still image
         this->progressFrame = 0;
-        this->animFrame = 11;
+        this->animFrame = 12; // stationary frame
     }
 }
 
