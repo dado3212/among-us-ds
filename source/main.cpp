@@ -10,10 +10,14 @@
 #include "player.h"
 #include "map.h"
 
+#define CENTER_X 128 // 256/2
+#define CENTER_Y 96 // 192/2
+
 void processInput(Player *player, Map* map) {
 	scanKeys();
 	int keys = keysHeld();
 	bool moving = false;
+	// Handle directional key presses
 	if (keys & KEY_UP) {
 		moving = true;
 		map->setY(map->getY() - 2);
@@ -32,12 +36,21 @@ void processInput(Player *player, Map* map) {
 		map->setX(map->getX() - 2);
 		player->setFacingRight(false);
 	}
-	// if (keys & KEY_TOUCH) {
-	// 	touchPosition touch;
-	// 	touchRead(&touch);
-	// 	player->setX(touch.px);
-	// 	player->setY(touch.py);
-	// }
+	// Handle touch controls
+	if (keys & KEY_TOUCH) {
+		moving = true;
+
+		touchPosition stylus;
+		touchRead(&stylus);
+		float xd = stylus.px - CENTER_X;
+		float yd = stylus.py - CENTER_Y;
+		float max = std::max(std::abs(xd), std::abs(yd));
+		xd = xd/max * 2;
+		yd = yd/max * 2;
+		player->setFacingRight(xd >= 0);
+		map->setX(map->getX() + xd);
+		map->setY(map->getY() + yd);
+	}
 	player->nextFrame(moving);
 	// KEY_A
 	// KEY_START
@@ -76,7 +89,7 @@ int main(int argc, char** argv){
 
 	u8 spriteID = 0;
 	// Spawn the character in the middle of the screen
-	NF_CreateSprite(screenID, spriteID, spriteLoadID, palleteLoadID, 256 / 2 - 32 / 2, 192 / 2 - 32 / 2);
+	NF_CreateSprite(screenID, spriteID, spriteLoadID, palleteLoadID, CENTER_X - 32 / 2, CENTER_Y - 32 / 2);
 
 	Player player;
 	Map map;
