@@ -85,6 +85,14 @@ int main(int argc, char** argv) {
 	// Set the Root Folder (this is black magic)
 	NF_SetRootFolder("NITROFS");
 
+	// if (nitroFSInit(NULL)) {
+	// 	// NitroFS ok
+	// 	// Si es correcto, cambia al ROOT del NitroFS
+	// 	chdir("nitro:/");
+	// } else {
+	// 	throwError("Failed to load NitroFS directory. Your ROM flashcard is probably set up differently.");
+	// }
+
 	// Initialize sound
 	soundEnable();
 	soundInit();
