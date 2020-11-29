@@ -10,6 +10,7 @@
 
 #include "player.h"
 #include "map.h"
+#include "sound.h"
 
 #define CENTER_X 128 // 256/2
 #define CENTER_Y 96 // 192/2
@@ -89,8 +90,8 @@ int main(int argc, char** argv) {
 	NF_InitRawSoundBuffers();
 	u8 backgroundMusic = 0;
 	u8 footsteps = 1;
-	NF_LoadRawSound("sounds/footsteps", footsteps, 11025, 0);
-	NF_LoadRawSound("sounds/background", backgroundMusic, 22050, 0);
+	NF_LoadRawSound("sounds/footsteps", footsteps, 11025, SoundFormat_8Bit );
+	NF_LoadRawSound("sounds/background", backgroundMusic, 22050, SoundFormat_8Bit );
 	NF_PlayRawSound(
 		backgroundMusic,
 		0, // volume (0-127) // MUTED, REMOVE THIS
