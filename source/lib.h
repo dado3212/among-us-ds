@@ -91,17 +91,6 @@ b = (3 << 11);
 // Libreria de colisiones
 #include "colision.h"
 
-// Libreria de archivos multimedia
-#include "media.h"
-
-// Libreria 3D, funciones comunes
-#include "3d.h"
-
-// Libreria 3D, Sprites
-#include "sprite3d.h"
-
-
-
 
 
 #endif
