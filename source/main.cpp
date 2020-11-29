@@ -138,7 +138,7 @@ int main(int argc, char** argv) {
 	NF_CreateTiledBg(screenID, 3, "skeld_13");
 
 	NF_LoadTiledBg("backgrounds/skeld_14", "skeld_14", 256, 256);
-	NF_CreateTiledBg(1, 3, "skeld_14");
+	// NF_CreateTiledBg(1, 3, "skeld_14");
 
 	u8 spriteLoadID = 0;
 	u8 palleteLoadID = 0;
