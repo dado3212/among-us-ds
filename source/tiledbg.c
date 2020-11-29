@@ -39,9 +39,6 @@ char* BUFFER_BGPAL[SLOTS_TBG];
 TYPE_TBG_INFO TILEDBG[SLOTS_TBG];			// Info de los fondos cargados en RAM
 TYPE_TBGLAYERS_INFO TILEDBG_LAYERS[2][4];		// Info de los fondos en pantalla
 
-// Define la estructura para las paletas extendidas
-TYPE_EXBGPAL_INFO EXBGPAL[SLOTS_EXBGPAL];	// Datos de las paletas extendidas
-
 // Define el array de bloques libres
 u8 TILEBLOCKS[2][MAX_BANKS_TILES];
 u8 MAPBLOCKS[2][MAX_BANKS_MAPS];
@@ -64,13 +61,6 @@ void InitTiledBgBuffers(void) {
 		TILEDBG[n].height = 0;			// Alto del Mapa
 		TILEDBG[n].available = true;		// Disponibilidad
 	}
-	// Buffers de paletas extendidas
-	for (n = 0; n < SLOTS_EXBGPAL; n ++) {
-		EXBGPAL[n].buffer = NULL;
-		EXBGPAL[n].palsize = 0;
-		EXBGPAL[n].inuse = false;
-	}
-
 }
 
 
@@ -82,9 +72,6 @@ void ResetTiledBgBuffers(void) {
 		free(BUFFER_BGTILES[n]);			// Vacia el Buffer para los tiles
 		free(BUFFER_BGMAP[n]);			// Vacia Buffer para el map
 		free(BUFFER_BGPAL[n]);			// Vacia Buffer para la paleta			
-	}
-	for (n = 0; n < SLOTS_EXBGPAL; n ++) {
-		EXBGPAL[n].buffer = NULL;
 	}
 	InitTiledBgBuffers();				// Reinicia el resto de variables
 }
@@ -1097,154 +1084,6 @@ void SetTilePal(u8 screen, u8 layer, u16 tile_x, u16 tile_y, u8 pal) {
 	*(BUFFER_BGMAP[TILEDBG_LAYERS[screen][layer].bgslot] + (address + 1)) = ((pal << 4) | data);
 
 }
-
-
-
-// Funcion LoadExBgPal();
-void LoadExBgPal(const char* file, u8 slot) {
-
-	// Verifica el rango de Id's de Gfx
-	if (slot > (SLOTS_EXBGPAL - 1)) {
-		Error(106, "ExBgPal", (SLOTS_EXBGPAL - 1));
-	}
-
-	// Variable temporal del tama�o de la paleta
-	u32 pal_size = 0;
-
-	// Vacia el buffer
-	free(EXBGPAL[slot].buffer);
-	EXBGPAL[slot].buffer = NULL;
-
-	// Declara los punteros a los ficheros
-	FILE* file_id;
-
-	// Variable para almacenar el path al archivo
-	char filename[256];
-
-	// Carga el archivo .PAL
-	sprintf(filename, "/%s.pal", file);
-	file_id = fopen(filename, "rb");
-	if (file_id) {	// Si el archivo existe...
-		// Obten el tama�o del archivo
-		fseek(file_id, 0, SEEK_END);
-		pal_size = ftell(file_id);
-		EXBGPAL[slot].palsize = pal_size;
-		rewind(file_id);
-		// Si el tama�o es inferior a 512 bytes, ajustalo
-		if (EXBGPAL[slot].palsize < 512) EXBGPAL[slot].palsize = 512;
-		// Reserva el espacio en RAM
-		EXBGPAL[slot].buffer = (char*) calloc (EXBGPAL[slot].palsize, sizeof(char));
-		if (EXBGPAL[slot].buffer == NULL) {		// Si no hay suficiente RAM libre
-			Error(102, NULL, EXBGPAL[slot].palsize);
-		}
-		// Lee el archivo y ponlo en la RAM
-		fread(EXBGPAL[slot].buffer, 1, pal_size, file_id);
-	} else {	// Si el archivo no existe...
-		Error(101, filename, 0);
-	}
-	fclose(file_id);		// Cierra el archivo
-
-	// Guarda el estado del slot
-	EXBGPAL[slot].inuse = true;
-
-}
-
-
-
-// Funcion UnloadExBgPal();
-void UnloadExBgPal(u8 slot) {
-
-	// Verifica el rango de Id's de Gfx
-	if (slot > (SLOTS_EXBGPAL - 1)) {
-		Error(106, "ExBgPal", (SLOTS_EXBGPAL - 1));
-	}
-
-	// Verifica si la Id esta cargada
-	if (!EXBGPAL[slot].inuse) {
-		Error(110, "ExBgPal", slot);
-	}
-
-	// Vacia el buffer
-	free(EXBGPAL[slot].buffer);
-	EXBGPAL[slot].buffer = NULL;
-
-	// Tama�o de la paleta a 0
-	EXBGPAL[slot].palsize = 0;
-
-	// Guarda el estado del slot
-	EXBGPAL[slot].inuse = false;
-
-}
-
-
-
-// Funcion VramExBgPal();
-void VramExBgPal(u8 screen, u8 layer, u8 id, u8 slot) {
-
-	// Verifica el rango de Id's de Gfx
-	if (slot > (SLOTS_EXBGPAL - 1)) {
-		Error(106, "ExBgPal", (SLOTS_EXBGPAL - 1));
-	}
-
-	// Verifica si la Id esta cargada
-	if (!EXBGPAL[slot].inuse) {
-		Error(110, "ExBgPal", slot);
-	}
-
-	// Tranfiere la Paleta a VRAM
-	u32 address = 0;
-	if (screen == 0) {
-		vramSetBankE(VRAM_E_LCD);
-		address = (0x06880000) + (layer << 13) + (slot << 9);
-		DmaMemCopy((void*)address, EXBGPAL[id].buffer, EXBGPAL[id].palsize);
-		vramSetBankE(VRAM_E_BG_EXT_PALETTE);
-	} else {	// Paletas de la pantalla 1 (VRAM_H)
-		vramSetBankH(VRAM_H_LCD);
-		address = (0x06898000) + (layer << 13) + (slot << 9);
-		DmaMemCopy((void*)address, EXBGPAL[id].buffer, EXBGPAL[id].palsize);
-		vramSetBankH(VRAM_H_SUB_BG_EXT_PALETTE);
-	}
-
-}
-
-
-
-// Funcion SetExBgPal();
-void SetExBgPal(u8 screen, u8 layer, u8 pal) {
-
-	// Verifica el rango de Id's de Gfx
-	if (pal > 15) {
-		Error(106, "ExBgPal", (SLOTS_EXBGPAL - 1));
-	}
-
-	// Verifica que el fondo esta creado
-	if (!TILEDBG_LAYERS[screen][layer].created) {
-		char text[32];
-		sprintf(text, "%d", screen);
-		Error(105, text, layer);		// Si no existe, error
-	}
-
-	// Tama�o del buffer
-	u32 mapsize = TILEDBG[TILEDBG_LAYERS[screen][layer].bgslot].mapsize;
-	// Variables comunes
-	u32 pos = 0;
-	u16 hibyte = 0;
-	u8 data = 0;
-
-	for (pos = 0; pos < mapsize; pos += 2) {
-		// Obten el valor actual del HI-Byte
-		hibyte = *(BUFFER_BGMAP[TILEDBG_LAYERS[screen][layer].bgslot] + (pos + 1));
-		// Y determina el valor del resto de datos del byte, excluyendo la paleta
-		data = (hibyte & 0x0F);
-		// Graba los bytes
-		*(BUFFER_BGMAP[TILEDBG_LAYERS[screen][layer].bgslot] + (pos + 1)) = ((pal << 4) | data);
-	}
-
-	// Actualiza el mapa en la VRAM
-	UpdateVramMap(screen, layer);
-
-}
-
 
 
 // Funcion SetTileHflip();

@@ -28,7 +28,6 @@ extern "C" {
 
 // Define los slots maximos para los fondos
 #define SLOTS_TBG 64			// Datos de los fondos
-#define SLOTS_EXBGPAL 128	// Paletas extendidas (maximo 16 paletas por fondo)
 
 // Define el numero maximo de bancos para tiles y mapas
 #define MAX_BANKS_TILES 8
@@ -55,14 +54,6 @@ typedef struct {
 	bool available;		// Disponibilidat del Slot
 } TYPE_TBG_INFO;
 extern TYPE_TBG_INFO TILEDBG[SLOTS_TBG];	// Datos de los fondos
-
-// Define la estructura para almacenar la info y datos de las paletas extendidas
-typedef struct {
-	char* buffer;	// Buffer para almacenar la paleta
-	u32 palsize;	// Tama�o de la paleta
-	bool inuse;		// Slot libre o en uso
-} TYPE_EXBGPAL_INFO;
-extern TYPE_EXBGPAL_INFO EXBGPAL[SLOTS_EXBGPAL];	// Datos de las paletas extendidas
 
 // Define estructura para almacenar la info de los fondos en pantalla
 typedef struct {
@@ -241,44 +232,6 @@ void SetTilePal(u8 screen, u8 layer, u16 tile_x, u16 tile_y, u8 pal);
 // Por defecto, todos los tiles usan la paleta del Slot n�0
 // Los datos se escriben de la compia en RAM del mapa del fondo, por lo que no seran
 // visibles hasta que ejecutes la funcion UpdateVramMap();
-
-
-
-
-
-// Funcion LoadExBgPal();
-void LoadExBgPal(const char* file, u8 slot);
-// Carga en el buffer de RAM correspondiente una paleta de fondos, para poderla usar
-// mas tarde como paleta extendida.
-
-
-
-
-
-// Funcion UnloadExBgPal();
-void UnloadExBgPal(u8 slot);
-// Borra de la RAM la paleta del slot especificado.
-
-
-
-
-
-// Funcion VramExBgPal();
-void VramExBgPal(u8 screen, u8 layer, u8 id, u8 slot);
-// Transfiere a la VRAM una paleta extendida en el slot de la pantalla y
-// fondo especificados.
-
-
-
-
-
-// Funcion SetExBgPal();
-void SetExBgPal(u8 screen, u8 layer, u8 pal);
-// Cambia la paleta extendida que usara un fondo.
-// La paleta debe de estar transferida en la VRAM previamente
-
-
-
 
 
 // Funcion SetTileHflip();
