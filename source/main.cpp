@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
+#include <cmath>
 #include <time.h>
 
 #include "player.h"
@@ -12,46 +13,55 @@
 
 #define CENTER_X 128 // 256/2
 #define CENTER_Y 96 // 192/2
+#define SPEED 2.5 // player speed
 
 void processInput(Player *player, Map* map) {
 	scanKeys();
 	int keys = keysHeld();
-	bool moving = false;
+	float dx = 0;
+	float dy = 0;
 	// Handle directional key presses
 	if (keys & KEY_UP) {
-		moving = true;
-		map->setY(map->getY() - 2);
+		dy = -1;
 	}
 	if (keys & KEY_DOWN) {
-		moving = true;
-		map->setY(map->getY() + 2);
+		dy = 1;
 	}
 	if (keys & KEY_RIGHT) {
-		moving = true;
-		map->setX(map->getX() + 2);
-		player->setFacingRight(true);
+		dx = 1;
 	}
 	if (keys & KEY_LEFT) {
-		moving = true;
-		map->setX(map->getX() - 2);
-		player->setFacingRight(false);
+		dx = -1;
 	}
 	// Handle touch controls
 	if (keys & KEY_TOUCH) {
-		moving = true;
-
 		touchPosition stylus;
 		touchRead(&stylus);
-		float xd = stylus.px - CENTER_X;
-		float yd = stylus.py - CENTER_Y;
-		float max = std::max(std::abs(xd), std::abs(yd));
-		xd = xd/max * 2;
-		yd = yd/max * 2;
-		player->setFacingRight(xd >= 0);
-		map->setX(map->getX() + xd);
-		map->setY(map->getY() + yd);
+		dx = stylus.px - CENTER_X;
+		dy = stylus.py - CENTER_Y;
+		float max = std::max(std::abs(dx), std::abs(dy));
+		dx = dx/max;
+		dy = dy/max;
 	}
-	player->nextFrame(moving);
+	player->nextFrame((dx != 0 || dy != 0));
+	if (dx != 0) {
+		player->setFacingRight(dx > 0);
+	}
+
+	// Scale according to angle
+	if (dx == 0) {
+		map->setY(map->getY() + dy * SPEED);
+	} else if (dy == 0) {
+		map->setX(map->getX() + dx * SPEED);
+	} else {
+		float new_y = sqrt(1 / (1 + (pow(dx, 2.0) / pow(dy, 2.0))));
+		if (dy < 0) {
+			new_y = -1 * new_y;
+		}
+		float new_x = new_y * dx / dy;
+		map->setY(map->getY() + new_y * SPEED);
+		map->setX(map->getX() + new_x * SPEED);
+	}
 	// KEY_A
 	// KEY_START
 }
@@ -79,7 +89,7 @@ int main(int argc, char** argv){
 	NF_LoadTiledBg("backgrounds/starting", "bg", 256, 256);
 	NF_CreateTiledBg(screenID, 3, "bg");
 
-	u8 spriteLoadID= 0;
+	u8 spriteLoadID = 0;
 	u8 palleteLoadID = 0;
 	NF_LoadSpriteGfx("sprites/walking_anim", spriteLoadID, 32, 32);	// Load our Sprite for the circle, cross and blank
 	NF_LoadSpritePal("sprites/walking_anim", palleteLoadID);
