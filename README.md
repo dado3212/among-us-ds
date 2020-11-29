@@ -7,6 +7,8 @@ This example consist of:
 
  
 # Build Instructions
+I ran this on Windows 10, so assume a mostly typical Windows 10 environment. If you're doing this on Unix, hopefully it works without any major changes. The only thing is that `make images` probably won't work. If you want to tweak the images, you'll need to extract the `grit` commands from the batch files.
+
 Follow the instructions at https://devkitpro.org/wiki/Getting_Started to install devkitPro. Install it with libnds.
 
 Git clone https://github.com/DeathCamel57/libgl2d_ds and follow the installation instructions.

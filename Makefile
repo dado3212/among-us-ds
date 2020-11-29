@@ -156,10 +156,18 @@ $(BUILD):
 
 #---------------------------------------------------------------------------------
 clean:
-	@echo clean ...
+	@echo Clean files...
 	@rm -fr $(BUILD) $(TARGET).elf $(TARGET).nds $(TARGET).arm9
 
 #---------------------------------------------------------------------------------
+images:
+	@echo Building resources...
+	@echo Building backgrounds...
+	@(cd $(CURDIR)/grit; cmd /C Convert_Backgrounds.bat)
+	@echo Building sprites...
+	@(cd $(CURDIR)/grit; cmd /C Convert_Sprites.bat)
+	@echo Done.
+
 else
 
 #---------------------------------------------------------------------------------
