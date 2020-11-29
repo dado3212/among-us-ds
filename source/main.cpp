@@ -15,8 +15,16 @@
 #define CENTER_Y 96 // 192/2
 #define SPEED 2.5 // player speed
 
-void processInput(Player *player, Map* map) {
+bool processInput(Player *player, Map* map) {
 	scanKeys();
+
+	// OTHER
+	if (keysUp() & KEY_START) {
+		// Swap screens
+		return true;
+	}
+
+	// MOVEMENT
 	int keys = keysHeld();
 	float dx = 0;
 	float dy = 0;
@@ -62,8 +70,10 @@ void processInput(Player *player, Map* map) {
 		map->setY(map->getY() + new_y * SPEED);
 		map->setX(map->getX() + new_x * SPEED);
 	}
+
 	// KEY_A
 	// KEY_START
+	return false;
 }
 
 int initializeGame(int screenID) {
@@ -108,7 +118,9 @@ int initializeGame(int screenID) {
 	Map map;
 	
 	while(1) {
-		processInput(&player, &map);
+		if (processInput(&player, &map)) {
+			break;
+		}
 		NF_SpriteFrame(screenID, spriteID, player.getAnimFrame());
 		NF_HflipSprite(screenID, spriteID, !player.isFacingRight());
 
@@ -123,10 +135,10 @@ int initializeGame(int screenID) {
 		}
 	}
 
-	return 0;
+	return initializeGame(screenID == 0 ? 1 : 0);
 }
 
 int main(int argc, char** argv){
 	// 0 for top screen, 1 for bottom screen
-	return initializeGame(1);
+	return initializeGame(0);
 }

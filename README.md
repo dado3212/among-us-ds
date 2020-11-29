@@ -1,10 +1,9 @@
 # Among Us DS 🎮
 
-This example consist of:
+This current demo consist of:
 
-- Touching the bottom screen and moving one sprite. The upper one will mirror your touch position
-- Using the Arrow Keys to move the second bottom sprite
-
+- Using the arrow keys or touch screen to move the character around.
+- Pressing start will swap between the top and bottom screens.
  
 # Build Instructions
 I ran this on Windows 10, so assume a mostly typical Windows 10 environment. If you're doing this on Unix, hopefully it works without any major changes. The only thing is that `make images` probably won't work. If you want to tweak the images, you'll need to extract the `grit` commands from the batch files.
