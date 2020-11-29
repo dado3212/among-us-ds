@@ -5,9 +5,6 @@ extern "C" {
 #ifndef __NF_LIB_H__
 #define __NF_LIB_H__
 
-// Definiciones comunes
-#include "defines.h"
-
 // Libreria de funciones basicas y comunes
 #include "basic.h"
 

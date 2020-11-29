@@ -66,22 +66,6 @@ void NF_DmaMemCopy(void* destination, const void* source, u32 size);
 // sigue siendo mas rapida.
 
 
-
-// Funcion NF_GetLanguage();
-extern u8 NF_GetLanguage(void);
-// Devuelve el ID del idioma del usuario
-// 0 : Japanese
-// 1 : English
-// 2 : French
-// 3 : German
-// 4 : Italian
-// 5 : Spanish
-// 6 : Chinese
-
-
-
-
-
 #endif
 
 #ifdef __cplusplus

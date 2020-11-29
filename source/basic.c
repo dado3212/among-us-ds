@@ -19,8 +19,6 @@
 
 // Includes propios
 #include "basic.h"
-#include "defines.h"
-
 
 
 // Define la variable global NF_ROOTFOLDER
@@ -189,21 +187,12 @@ void NF_SetRootFolder(const char* folder) {
 		} else {
 			// Fallo. Deten el programa
 			consoleDemoInit();	// Inicializa la consola de texto
-			if (NF_GetLanguage() == 5) {
-				iprintf("Error iniciando NitroFS.\n");
-				iprintf("Programa detenido.\n\n");
-				iprintf("Verifica que tu flashcard\n");
-				iprintf("es compatible con Argv.\n");
-				iprintf("Si no lo es, intenta usar el\n");
-				iprintf("Homebrew Menu para ejecutarla.\n\n");
-			} else {
-				iprintf("NitroFS Init Error.\n");
-				iprintf("Abnormal termination.\n\n");
-				iprintf("Check if your flashcard is\n");
-				iprintf("Argv compatible.\n");
-				iprintf("If not, try to launch the ROM\n");
-				iprintf("using the Homebrew Menu.\n\n");
-			}
+			iprintf("NitroFS Init Error.\n");
+			iprintf("Abnormal termination.\n\n");
+			iprintf("Check if your flashcard is\n");
+			iprintf("Argv compatible.\n");
+			iprintf("If not, try to launch the ROM\n");
+			iprintf("using the Homebrew Menu.\n\n");
 			iprintf("http://sourceforge.net/projects/devkitpro/files/hbmenu/");
 			// Bucle infinito. Fin del programa
 			while(1) {
@@ -222,19 +211,11 @@ void NF_SetRootFolder(const char* folder) {
 		} else {
 			// Fallo. Deten el programa
 			consoleDemoInit();	// Inicializa la consola de texto
-			if (NF_GetLanguage() == 5) {
-				iprintf("Error iniciando FAT.\n");
-				iprintf("Programa detenido.\n\n");
-				iprintf("Verifica que tu flashcard es\n");
-				iprintf("compatible con DLDI y la ROM\n");
-				iprintf("este parcheada correctamente.\n");
-			} else {
-				iprintf("FAT Init Error.\n");
-				iprintf("Abnormal termination.\n\n");
-				iprintf("Check if your flashcard is\n");
-				iprintf("DLDI compatible and the ROM\n");
-				iprintf("is correctly patched.\n");
-			}
+			iprintf("FAT Init Error.\n");
+			iprintf("Abnormal termination.\n\n");
+			iprintf("Check if your flashcard is\n");
+			iprintf("DLDI compatible and the ROM\n");
+			iprintf("is correctly patched.\n");
 			// Bucle infinito. Fin del programa
 			while(1) {
 				swiWaitForVBlank();
@@ -288,16 +269,5 @@ void NF_DmaMemCopy(void* destination, const void* source, u32 size) {
 		DC_InvalidateRange(destination, size);
 
 	}
-
-}
-
-
-
-// Funcion NF_GetLanguage();
-u8 NF_GetLanguage(void) {
-
-	// Asegurate que el valor devuelto corresponde a los
-	// contenidos en los BITS 0, 1 y 2 de la direccion de memoria
-	return (NF_UDATA_LANG & 0x07);
 
 }
