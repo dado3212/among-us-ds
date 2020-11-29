@@ -80,14 +80,45 @@ bool processInput(Player *player, Map* map) {
 	return false;
 }
 
-int initializeGame(int screenID) {
-	if (screenID == 0) {
-		powerOn(PM_BACKLIGHT_TOP);
-		// powerOff(PM_BACKLIGHT_BOTTOM);
-	} else {
-		// powerOff(PM_BACKLIGHT_TOP);
-		powerOn(PM_BACKLIGHT_BOTTOM);
-	}
+int main(int argc, char** argv) {
+	// Set the Root Folder (this is black magic)
+	NF_SetRootFolder("NITROFS");
+
+	// Initialize sound
+	soundEnable();
+	NF_InitRawSoundBuffers();
+	u8 backgroundMusic = 0;
+	u8 footsteps = 1;
+	NF_LoadRawSound("sounds/footsteps", footsteps, 11025, 0);
+	NF_LoadRawSound("sounds/background", backgroundMusic, 22050, 0);
+	NF_PlayRawSound(
+		backgroundMusic,
+		0, // volume (0-127) // MUTED, REMOVE THIS
+		64, // pan (0-64-127)
+		true, // loop?
+		0 // loop start point
+	);
+
+	// This is a hack
+	// Play the footstep song on a loop, just change if it's audible
+	NF_PlayRawSound(
+		footsteps,
+		127, // volume (0-127)
+		64, // pan (0-64-127)
+		true, // loop?
+		0 // loop start point
+	);
+	soundPause(footsteps);
+
+	// 0 for top screen, 1 for bottom screen
+	// if (screenID == 0) {
+	// 	powerOn(PM_BACKLIGHT_TOP);
+	// 	// powerOff(PM_BACKLIGHT_BOTTOM);
+	// } else {
+	// 	// powerOff(PM_BACKLIGHT_TOP);
+	// 	powerOn(PM_BACKLIGHT_BOTTOM);
+	// }
+	int screenID = 0;
 
 	// Turn on MODE 0 on the Top Screen
 	NF_Set2D(screenID, 0);
@@ -100,9 +131,14 @@ int initializeGame(int screenID) {
 	NF_InitSpriteBuffers();		
 	NF_InitSpriteSys(screenID);
 
+	swiWaitForVBlank();
+
 	// Load the starting tiled background
-	NF_LoadTiledBg("backgrounds/skeld_13", "bg", 256, 256);
-	NF_CreateTiledBg(screenID, 3, "bg");
+	NF_LoadTiledBg("backgrounds/skeld_13", "skeld_13", 256, 256);
+	NF_CreateTiledBg(screenID, 3, "skeld_13");
+
+	NF_LoadTiledBg("backgrounds/skeld_14", "skeld_14", 256, 256);
+	NF_CreateTiledBg(1, 3, "skeld_14");
 
 	u8 spriteLoadID = 0;
 	u8 palleteLoadID = 0;
@@ -141,39 +177,5 @@ int initializeGame(int screenID) {
 		}
 	}
 
-	return initializeGame(screenID == 0 ? 1 : 0);
-}
-
-int main(int argc, char** argv) {
-	// Set the Root Folder (this is black magic)
-	NF_SetRootFolder("NITROFS");
-
-	// Initialize sound
-	soundEnable();
-	NF_InitRawSoundBuffers();
-	u8 backgroundMusic = 0;
-	u8 footsteps = 1;
-	NF_LoadRawSound("sounds/footsteps", footsteps, 11025, 0);
-	NF_LoadRawSound("sounds/background", backgroundMusic, 22050, 0);
-	NF_PlayRawSound(
-		backgroundMusic,
-		0, // volume (0-127) // MUTED, REMOVE THIS
-		64, // pan (0-64-127)
-		true, // loop?
-		0 // loop start point
-	);
-
-	// This is a hack
-	// Play the footstep song on a loop, just change if it's audible
-	NF_PlayRawSound(
-		footsteps,
-		127, // volume (0-127)
-		64, // pan (0-64-127)
-		true, // loop?
-		0 // loop start point
-	);
-	soundPause(footsteps);
-
-	// 0 for top screen, 1 for bottom screen
-	return initializeGame(0);
+	return 0;
 }
