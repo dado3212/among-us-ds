@@ -11,6 +11,7 @@
 #include "player.h"
 #include "map.h"
 #include "sound.h"
+#include "errors.h"
 
 #define CENTER_X 128 // 256/2
 #define CENTER_Y 96 // 192/2
