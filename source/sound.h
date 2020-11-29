@@ -1,89 +1,47 @@
 
-#ifndef __NF_SOUND_H__
-#define __NF_SOUND_H__
+#ifndef SOUND_H
+#define SOUND_H
 
-
-
-
-
-// NightFox LIB - Include de funciones de sonido
-// Requiere DevkitARM
-// Codigo por Cesar Rincon "NightFox"
-// http://www.nightfoxandco.com/
-// Version 20140413
-
-
-
-
-
-// Includes devKitPro
 #include <nds.h>
 
+// Define audio slots
+#define SLOTS_RAWSOUND 32
 
+// Define audio buffers
+extern char* BUFFER_RAWSOUND[SLOTS_RAWSOUND];
 
-
-
-// Define los Slots para archivos de audio
-#define NF_SLOTS_RAWSOUND 32
-
-// Define los Buffers para almacenar los archivos de audio
-extern char* NF_BUFFER_RAWSOUND[NF_SLOTS_RAWSOUND];
-
-// Define la estructura de datos de los buffers (Audio)
+// Define storage type
 typedef struct {
-	bool available;		// Disponibilidat del Slot
-	u32 size;			// Tama�o (en bytes) del sonido
-	u16 freq;			// Frecuencia del sample
-	SoundFormat format;			// Formato del sample
-} NF_TYPE_RAWSOUND_INFO;
-extern NF_TYPE_RAWSOUND_INFO NF_RAWSOUND[NF_SLOTS_RAWSOUND];	// Datos de los sonidos cargado
+	bool available;		// Free
+	u32 size;			// Byte count of sound
+	u16 freq;			// Frequency
+	SoundFormat format;	// Sample format
+} RAWSOUND_INFO;
+extern RAWSOUND_INFO RAW_SOUND[SLOTS_RAWSOUND];	// Saved sound data
 
+// Initialize buffers + sound structures for RAW files. Need to invoke
+// this once before you can load or play sounds.
+void soundInit(void);
 
+// Reset all sound buffers. Clears everything in preparation for a new screen, etc.
+void soundReset(void);
 
+// Load a RAW file into RAM via FAT or EFS
+//   file - name of the file without extension
+//   id - slot for the sound effect, between 0 and 31
+//   freq - frequency of the sound, en HZ (11025 or 22050 primarily)
+//   format - sound format (SoundFormat_8Bit, SoundFormat_16Bit, SoundFormat_ADPCM)
+void loadSound(const char* file, u16 id,  u16 freq, SoundFormat format);
 
+// Clears ram of the given sound slot
+void unloadSound(u8 id);
 
-// Funcion NF_InitRawSoundBuffers();
-void NF_InitRawSoundBuffers(void);
-// Iniciliaza los buffers y estructuras de datos para cargar sonidos en 
-// formato RAW. Debes de ejecutar esta funcion una vez antes de cargar
-// ningun sonido en este formato
-
-
-
-// Funcion NF_ResetRawSoundBuffers();
-void NF_ResetRawSoundBuffers(void);
-// Reinicia todos los buffers de sonido. Esta funcion es util para vaciar todos los datos
-// en un cambio de pantalla, etc.
-
-
-
-// Funcion NF_LoadRawSound();
-void NF_LoadRawSound(const char* file, u16 id,  u16 freq, SoundFormat format);
-// Carga un archivo RAW a la RAM desde la FAT o EFS
-// Debes especificar el nombre del archivo sin extension, el slot
-// donde lo guardaras (0 - 31), la frecuencia del sample (en Hz, 
-// por ejemplo 11050) y el formato de datos
-// (0 - > 8 bits, 1 - > 16 bits, 2 -> ADPCM)
-
-
-
-// Funcion UnloadRawSound();
-void NF_UnloadRawSound(u8 id);
-// Borra de la RAM el archivo cargado en el slot indicado.
-// Debes especificar el slot a borrar (0 - 31)
-
-
-
-// Funcion NF_PlayRawSound();
-extern u8 NF_PlayRawSound(u8 id, u8 volume, u8 pan, bool loop, u16 loopfrom);
-// Reproduce un archivo de sonido cargado en RAM.
-// Debes especificar el slot donde se ha cargado el sonido, el volumen (0 - 127), 
-// el balance (0 Izquierda, 64 Centro, 127 Derecha), si se reproducira en bucle y
-// de ser asi, a partir de que sample se producira este.
-// Esta funcion devuelve el canal asignado a esta reproduccion
-
-
-
-
+// Plays a loaded sound effect
+//   id - slot of the sound effect, between 0 and 31
+//   volume - volume to play, 0 - 127
+//   pan - balance, 0 is left, 64 is center, 127 is right
+//   loop - whether to loop
+//   loopfrom - where to loop the song
+extern u8 playSound(u8 id, u8 volume, u8 pan, bool loop, u16 loopfrom);
 
 #endif

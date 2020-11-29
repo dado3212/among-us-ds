@@ -1,97 +1,54 @@
-
-// NightFox LIB - Funciones de de funciones de sonido
-// Requiere DevkitARM
-// Codigo por Cesar Rincon "NightFox"
-// http://www.nightfoxandco.com/
-// Version 20140413
-
-
-
-
-
-// Includes devKitPro
 #include <nds.h>
 #include <filesystem.h>
 #include <fat.h>
 
-// Includes C
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 
-// Includes propios
 #include "nf_basic.h"
 #include "sound.h"
 
+char* BUFFER_RAWSOUND[SLOTS_RAWSOUND];
+RAWSOUND_INFO RAWSOUND[SLOTS_RAWSOUND];
 
-
-
-
-// Define los Buffers para almacenar los archivos de audio
-char* NF_BUFFER_RAWSOUND[NF_SLOTS_RAWSOUND];
-
-// Datos de los sonidos cargado
-NF_TYPE_RAWSOUND_INFO NF_RAWSOUND[NF_SLOTS_RAWSOUND];
-
-
-
-
-
-// Funcion NF_InitRawSoundBuffers();
-void NF_InitRawSoundBuffers(void) {
-
-	u8 n = 0;	// Variable comun
-
-	// Inicializa Buffers de sonido en RAW
-	for (n = 0; n < NF_SLOTS_RAWSOUND; n ++) {
-		NF_BUFFER_RAWSOUND[n] = NULL;			// Inicializa puntero
-		NF_RAWSOUND[n].available = true;		// Disponibilidad del slot
-		NF_RAWSOUND[n].size = 0;				// Tama�o del archivo
-		NF_RAWSOUND[n].freq = 0;				// Frecuencia del sample
-		NF_RAWSOUND[n].format = SoundFormat_8Bit;				// Formato del sample
+void soundInit(void) {
+	for (u8 n = 0; n < SLOTS_RAWSOUND; n++) {
+		BUFFER_RAWSOUND[n] = NULL;			// Inicializa puntero
+		RAWSOUND[n].available = true;		// Disponibilidad del slot
+		RAWSOUND[n].size = 0;				// Tama�o del archivo
+		RAWSOUND[n].freq = 0;				// Frecuencia del sample
+		RAWSOUND[n].format = SoundFormat_8Bit;				// Formato del sample
 	}
-
 }
 
-
-
-
-
-// Funcion NF_ResetRawSoundBuffers();
-void NF_ResetRawSoundBuffers(void) {
-
-	u8 n = 0;	// Variable comun
+void soundReset(void) {
 
 	// Borra los datos de los buffers de sonido en RAW
-	for (n = 0; n < NF_SLOTS_RAWSOUND; n ++) {
-		free(NF_BUFFER_RAWSOUND[n]);			// Borra el contenido puntero
+	for (u8 n = 0; n < SLOTS_RAWSOUND; n++) {
+		free(BUFFER_RAWSOUND[n]);			// Borra el contenido puntero
 	}
 
 	// Reinicia las estructuras de datos
-	NF_InitRawSoundBuffers();
+	soundInit();
 
 }
 
-
-
-
-
-// Funcion NF_LoadRawSound();
-void NF_LoadRawSound(const char* file, u16 id,  u16 freq, SoundFormat format) {
+void loadSound(const char* file, u16 id, u16 freq, SoundFormat format) {
 
 	// Verifica el rango de Id's
-	if ((id < 0) || (id >= NF_SLOTS_RAWSOUND)) {
-		NF_Error(106, "Raw Sound", NF_SLOTS_RAWSOUND);
+	if ((id < 0) || (id >= SLOTS_RAWSOUND)) {
+		NF_Error(106, "Raw Sound", SLOTS_RAWSOUND);
 	}
 
 	// Verifica si la Id esta libre
-	if (!NF_RAWSOUND[id].available) {
+	if (!RAWSOUND[id].available) {
 		NF_Error(109, "Raw Sound", id);
 	}
 
 	// Vacia los buffers que se usaran
-	free(NF_BUFFER_RAWSOUND[id]);
-	NF_BUFFER_RAWSOUND[id] = NULL;
+	free(BUFFER_RAWSOUND[id]);
+	BUFFER_RAWSOUND[id] = NULL;
 
 	// Declara los punteros a los ficheros
 	FILE* file_id;
@@ -105,17 +62,17 @@ void NF_LoadRawSound(const char* file, u16 id,  u16 freq, SoundFormat format) {
 	if (file_id) {	// Si el archivo existe...
 		// Obten el tama�o del archivo
 		fseek(file_id, 0, SEEK_END);
-		NF_RAWSOUND[id].size = ftell(file_id);
+		RAWSOUND[id].size = ftell(file_id);
 		rewind(file_id);
 		// Si excede del tama�o maximo, error
-		if (NF_RAWSOUND[id].size > (1 << 18)) NF_Error(116, filename, (1 << 18));
+		if (RAWSOUND[id].size > (1 << 18)) NF_Error(116, filename, (1 << 18));
 		// Reserva el espacio en RAM
-		NF_BUFFER_RAWSOUND[id] = (char*) calloc (NF_RAWSOUND[id].size, sizeof(char));
-		if (NF_BUFFER_RAWSOUND[id] == NULL) {		// Si no hay suficiente RAM libre
-			NF_Error(102, NULL, NF_RAWSOUND[id].size);
+		BUFFER_RAWSOUND[id] = (char*) calloc (RAWSOUND[id].size, sizeof(char));
+		if (BUFFER_RAWSOUND[id] == NULL) {		// Si no hay suficiente RAM libre
+			NF_Error(102, NULL, RAWSOUND[id].size);
 		}
 		// Lee el archivo y ponlo en la RAM
-		fread(NF_BUFFER_RAWSOUND[id], 1, NF_RAWSOUND[id].size, file_id);
+		fread(BUFFER_RAWSOUND[id], 1, RAWSOUND[id].size, file_id);
 	} else {	// Si el archivo no existe...
 		NF_Error(101, filename, 0);
 	}
@@ -123,53 +80,41 @@ void NF_LoadRawSound(const char* file, u16 id,  u16 freq, SoundFormat format) {
 	// swiWaitForVBlank();		// Espera al cierre del archivo (Usar en caso de corrupcion de datos)
 
 	// Guarda los parametros del archivo de sonido
-	NF_RAWSOUND[id].freq = freq;		// Frequencia del sample (en Hz)
-	NF_RAWSOUND[id].format = format;	// Formato del sample (0 - > 8 bits, 1 - > 16 bits, 2 -> ADPCM)
+	RAWSOUND[id].freq = freq;		// Frequencia del sample (en Hz)
+	RAWSOUND[id].format = format;	// Formato del sample (0 - > 8 bits, 1 - > 16 bits, 2 -> ADPCM)
 
 	// Y marca esta ID como usada
-	NF_RAWSOUND[id].available = false;
-
+	RAWSOUND[id].available = false;
 }
 
-
-
-
-
-// Funcion UnloadRawSound();
-void NF_UnloadRawSound(u8 id) {
+void unloadSound(u8 id) {
 
 	// Verifica el rango de Id's
-	if ((id < 0) || (id >= NF_SLOTS_RAWSOUND)) NF_Error(106, "RAW Sound", NF_SLOTS_RAWSOUND); 
+	if ((id < 0) || (id >= SLOTS_RAWSOUND)) NF_Error(106, "RAW Sound", SLOTS_RAWSOUND); 
 
 	// Verifica si el sonido existe
-	if (NF_RAWSOUND[id].available) NF_Error(110, "RAW Sound", id);
+	if (RAWSOUND[id].available) NF_Error(110, "RAW Sound", id);
 
 	// Vacia los buffers de la Id. seleccionada
-	free(NF_BUFFER_RAWSOUND[id]);
-	NF_BUFFER_RAWSOUND[id] = NULL;
+	free(BUFFER_RAWSOUND[id]);
+	BUFFER_RAWSOUND[id] = NULL;
 
 	// Resetea las variables
-	NF_RAWSOUND[id].freq = 0;		// Frequencia del sample (en Hz)
-	NF_RAWSOUND[id].format = SoundFormat_8Bit ;	// Formato del sample (0 - > 8 bits, 1 - > 16 bits, 2 -> ADPCM)
+	RAWSOUND[id].freq = 0;		// Frequencia del sample (en Hz)
+	RAWSOUND[id].format = SoundFormat_8Bit;	// Formato del sample (0 - > 8 bits, 1 - > 16 bits, 2 -> ADPCM)
 
 	// Y marca esta ID como libre
-	NF_RAWSOUND[id].available = true;
-
+	RAWSOUND[id].available = true;
 }
 
-
-
-
-
-// Funcion NF_PlayRawSound();
-u8 NF_PlayRawSound(u8 id, u8 volume, u8 pan, bool loop, u16 loopfrom) {
+u8 playSound(u8 id, u8 volume, u8 pan, bool loop, u16 loopfrom) {
 
 	// Verifica el rango de Id's
-	if ((id < 0) || (id >= NF_SLOTS_RAWSOUND)) NF_Error(106, "RAW Sound", NF_SLOTS_RAWSOUND); 
+	if ((id < 0) || (id >= SLOTS_RAWSOUND)) NF_Error(106, "RAW Sound", SLOTS_RAWSOUND); 
 
 	// Verifica si el sonido existe
-	if (NF_RAWSOUND[id].available) NF_Error(110, "RAW Sound", id);
+	if (RAWSOUND[id].available) NF_Error(110, "RAW Sound", id);
 
-	return soundPlaySample(NF_BUFFER_RAWSOUND[id], NF_RAWSOUND[id].format, NF_RAWSOUND[id].size, NF_RAWSOUND[id].freq, volume, pan, loop, loopfrom);
+	return soundPlaySample(BUFFER_RAWSOUND[id], RAWSOUND[id].format, RAWSOUND[id].size, RAWSOUND[id].freq, volume, pan, loop, loopfrom);
 
 }

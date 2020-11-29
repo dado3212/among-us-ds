@@ -87,12 +87,12 @@ int main(int argc, char** argv) {
 
 	// Initialize sound
 	soundEnable();
-	NF_InitRawSoundBuffers();
+	soundInit();
 	u8 backgroundMusic = 0;
 	u8 footsteps = 1;
-	NF_LoadRawSound("sounds/footsteps", footsteps, 11025, SoundFormat_8Bit );
-	NF_LoadRawSound("sounds/background", backgroundMusic, 22050, SoundFormat_8Bit );
-	NF_PlayRawSound(
+	loadSound("sounds/footsteps", footsteps, 11025, SoundFormat_8Bit);
+	loadSound("sounds/background", backgroundMusic, 22050, SoundFormat_8Bit);
+	playSound(
 		backgroundMusic,
 		0, // volume (0-127) // MUTED, REMOVE THIS
 		64, // pan (0-64-127)
@@ -102,7 +102,7 @@ int main(int argc, char** argv) {
 
 	// This is a hack
 	// Play the footstep song on a loop, just change if it's audible
-	NF_PlayRawSound(
+	playSound(
 		footsteps,
 		127, // volume (0-127)
 		64, // pan (0-64-127)
