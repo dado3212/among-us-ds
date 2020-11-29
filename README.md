@@ -21,6 +21,14 @@ cd to this directory and run `make` and hope like heck that the build environmen
 For images, they need to be in Indexed mode (Image > Mode > Indexed Color), and then exported as .bmp (forced into 8bit). Then use the GRIT tool in the
 NFLib checkout with Compile_Backgrounds.bat.
 
+This has been simplified to just running `make images`.
+
+# Sounds
+To convert sound files to RAW format I used [Switch](http://www.nch.com.au/switch/plus.html) as recommended by NightFox. I exported as Mono, 8 bis signed at 11025hz for sound effects, and 22050hz for background music.
+
+Skeld background music - https://www.youtube.com/watch?v=oRuoaG6ugW0
+Footsteps sound - https://www.myinstants.com/instant/among-us-walking-35307/
+
 ## Thanks To
 
 These Github repositories were a huge help at varying stages of the development cycle.
