@@ -91,9 +91,6 @@ b = (3 << 11);
 // Libreria de colisiones
 #include "nf_colision.h"
 
-// Libreria de sonido
-#include "nf_sound.h"
-
 // Libreria de archivos multimedia
 #include "nf_media.h"
 
