@@ -23,6 +23,7 @@ bool processInput(Player *player, Map* map) {
 		// Swap screens
 		return true;
 	}
+	// KEY_A
 
 	// MOVEMENT
 	int keys = keysHeld();
@@ -51,28 +52,31 @@ bool processInput(Player *player, Map* map) {
 		dx = dx/max;
 		dy = dy/max;
 	}
-	player->nextFrame((dx != 0 || dy != 0));
-	if (dx != 0) {
-		player->setFacingRight(dx > 0);
-	}
-
-	// Scale according to angle
-	if (dx == 0) {
-		map->setY(map->getY() + dy * SPEED);
-	} else if (dy == 0) {
-		map->setX(map->getX() + dx * SPEED);
-	} else {
-		float new_y = sqrt(1 / (1 + (pow(dx, 2.0) / pow(dy, 2.0))));
-		if (dy < 0) {
-			new_y = -1 * new_y;
+	bool moving = (dx != 0 || dy != 0);
+	player->nextFrame(moving);
+	if (moving) {
+		 soundResume(1);
+		if (dx != 0) {
+			player->setFacingRight(dx > 0);
 		}
-		float new_x = new_y * dx / dy;
-		map->setY(map->getY() + new_y * SPEED);
-		map->setX(map->getX() + new_x * SPEED);
-	}
 
-	// KEY_A
-	// KEY_START
+		// Scale according to angle
+		if (dx == 0) {
+			map->setY(map->getY() + dy * SPEED);
+		} else if (dy == 0) {
+			map->setX(map->getX() + dx * SPEED);
+		} else {
+			float new_y = sqrt(1 / (1 + (pow(dx, 2.0) / pow(dy, 2.0))));
+			if (dy < 0) {
+				new_y = -1 * new_y;
+			}
+			float new_x = new_y * dx / dy;
+			map->setY(map->getY() + new_y * SPEED);
+			map->setX(map->getX() + new_x * SPEED);
+		}
+	} else {
+		soundPause(1);
+	}
 	return false;
 }
 
@@ -87,8 +91,6 @@ int initializeGame(int screenID) {
 
 	// Turn on MODE 0 on the Top Screen
 	NF_Set2D(screenID, 0);
-	// Set the Root Folder (this is black magic)
-	NF_SetRootFolder("NITROFS");
 
 	// Initialize the Tiled Backgrounds System on the Top Screen
 	NF_InitTiledBgBuffers();	
@@ -138,7 +140,36 @@ int initializeGame(int screenID) {
 	return initializeGame(screenID == 0 ? 1 : 0);
 }
 
-int main(int argc, char** argv){
+int main(int argc, char** argv) {
+	// Set the Root Folder (this is black magic)
+	NF_SetRootFolder("NITROFS");
+
+	// Initialize sound
+	soundEnable();
+	NF_InitRawSoundBuffers();
+	u8 backgroundMusic = 0;
+	u8 footsteps = 1;
+	NF_LoadRawSound("sounds/sample", footsteps, 11025, 0);
+	NF_LoadRawSound("sounds/music", backgroundMusic, 22050, 0);
+	NF_PlayRawSound(
+		backgroundMusic,
+		80, // volume (0-127)
+		64, // pan (0-64-127)
+		true, // loop?
+		0 // loop start point
+	);
+
+	// This is a hack
+	// Play the footstep song on a loop, just change if it's audible
+	NF_PlayRawSound(
+		footsteps,
+		80, // volume (0-127)
+		64, // pan (0-64-127)
+		true, // loop?
+		0 // loop start point
+	);
+	soundPause(footsteps);
+
 	// 0 for top screen, 1 for bottom screen
 	return initializeGame(0);
 }
