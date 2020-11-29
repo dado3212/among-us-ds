@@ -31,6 +31,9 @@ Footsteps sound - https://www.myinstants.com/instant/among-us-walking-35307/
 
 ## Thanks To
 
+HUGE thanks to Cesar Rincon or "NightFox" - http://www.nightfoxandco.com/
+While I'm no longer using his libraries verbatim, they were overwhelmingly the backbone for this project.
+
 These Github repositories were a huge help at varying stages of the development cycle.
 https://github.com/Mika-Westphal/FlappyNDS
 https://sourceforge.net/projects/nflib/
