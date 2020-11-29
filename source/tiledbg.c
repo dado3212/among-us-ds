@@ -85,8 +85,8 @@ void InitTiledBgSys(u8 screen) {
 	u8 n = 0;
 
 	// Define el numero de bancos de Mapas y Tiles
-	BANKS_TILES[screen] = 8;		// (1 banks = 16kb)	Cada banco de tiles puede alvergar 8 bancos de Mapas
-	BANKS_MAPS[screen] = 16;		// (1 bank = 2kb)	Usar multiplos de 8. Cada set de 8 bancos consume 1 banco de tiles
+	BANKS_TILES[screen] = MAX_BANKS_TILES;		// (1 banks = 16kb)	Cada banco de tiles puede alvergar 8 bancos de Mapas
+	BANKS_MAPS[screen] = MAX_BANKS_MAPS;		// (1 bank = 2kb)	Usar multiplos de 8. Cada set de 8 bancos consume 1 banco de tiles
 	// Por defecto Tiles = 8, Mapas = 16
 	// Esto nos deja 6 bancos de 16kb para tiles
 	// y 16 bancos de 2kb para mapas
@@ -130,9 +130,9 @@ void InitTiledBgSys(u8 screen) {
 		// Si es la pantalla 0 (Superior, Main engine)
 		REG_DISPCNT |= (DISPLAY_BG_EXT_PALETTE);	// Activa las paletas extendidas
 		vramSetBankA(VRAM_A_MAIN_BG);				// Banco A de la VRAM para fondos (128kb)
-		memset((void*)0x06000000, 0, 131072);		// Borra el contenido del banco A
+		memset((void*)0x06000000, 0, 1 << 17);		// Borra el contenido del banco A
 		vramSetBankE(VRAM_E_LCD);					// Reserva el banco E de la VRAM para Paletas Extendidas (0-3) (32kb de 64kb)
-		memset((void*)0x06880000, 0, 32768);		// Borra el contenido del banco E
+		memset((void*)0x06880000, 0, 1 << 15);		// Borra el contenido del banco E
 		for (n = 0; n < 4; n ++) {					// Oculta todas las 4 capas
 			HideBg(0, n);
 		}
@@ -140,9 +140,9 @@ void InitTiledBgSys(u8 screen) {
 		// Si es la pantalla 1 (Inferior, Sub engine)
 		REG_DISPCNT_SUB |= (DISPLAY_BG_EXT_PALETTE);	// Activa las paletas extendidas
 		vramSetBankC(VRAM_C_SUB_BG);					// Banco C de la VRAM para fondos (128kb)
-		memset((void*)0x06200000, 0, 131072);			// Borra el contenido del banco C
+		memset((void*)0x06200000, 0, 1 << 17);			// Borra el contenido del banco C
 		vramSetBankH(VRAM_H_LCD);						// Reserva el banco H de la VRAM para Paletas Extendidas (0-3) (32kb)
-		memset((void*)0x06898000, 0, 32768);			// Borra el contenido del banco H
+		memset((void*)0x06898000, 0, 1 << 15);			// Borra el contenido del banco H
 		for (n = 0; n < 4; n ++) {						// Oculta todas las 4 capas
 			HideBg(1, n);
 		}
@@ -165,7 +165,7 @@ void LoadTiledBg(const char* file, const char* name, u16 width, u16 height) {
 		if (TILEDBG[n].available) {			// Si esta libre
 			TILEDBG[n].available = false;	// Marcalo como en uso
 			slot = n;							// Guarda el slot a usar
-			n = SLOTS_TBG;					// Deja de buscar
+			break;
 		}
 	}
 	// Si no hay ningun slot libre, error
@@ -280,7 +280,7 @@ void LoadTilesForBg(const char* file, const char* name, u16 width, u16 height, u
 		if (TILEDBG[n].available) {			// Si esta libre
 			TILEDBG[n].available = false;	// Marcalo como en uso
 			slot = n;							// Guarda el slot a usar
-			n = SLOTS_TBG;					// Deja de buscar
+			break;
 		}
 	}
 	// Si no hay ningun slot libre, error
@@ -395,7 +395,7 @@ void UnloadTiledBg(const char* name) {
 	for (n = 0; n < SLOTS_TBG; n ++) {				// Busca en todos los slots
 		if (strcmp(bg, TILEDBG[n].name) == 0) {		// Si lo encuentras
 			slot = n;									// Guarda el slot a usar
-			n = SLOTS_TBG;							// Deja de buscar
+			break;
 		}
 	}
 	// Si no se encuentra, error
@@ -437,7 +437,7 @@ void CreateTiledBg(u8 screen, u8 layer, const char* name) {
 	for (n = 0; n < SLOTS_TBG; n ++) {				// Busca en todos los slots
 		if (strcmp(bg, TILEDBG[n].name) == 0) {		// Si lo encuentras
 			slot = n;									// Guarda el slot a usar
-			n = SLOTS_TBG;							// Deja de buscar
+			break;
 		}
 	}
 	// Si no se encuentra, error
@@ -494,7 +494,7 @@ void CreateTiledBg(u8 screen, u8 layer, const char* name) {
 			}
 			counter ++;								
 			if (counter == tilesblocks) {			// Si ya tienes suficientes bloques libres
-				n = BANKS_TILES[screen];			// Termina de buscar
+				break;
 			}
 		} else {									// Si el bloque no esta libre
 			start = 255;							// Borra el marcador
@@ -538,7 +538,7 @@ void CreateTiledBg(u8 screen, u8 layer, const char* name) {
 			}
 			counter ++;								
 			if (counter == mapblocks) {				// Si ya tienes suficientes bloques libres
-				n = BANKS_MAPS[screen];					// Termina de buscar
+				break;
 			}
 		} else {									// Si el bloque no esta libre
 			start = 255;							// Borra el marcador

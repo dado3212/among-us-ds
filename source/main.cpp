@@ -146,8 +146,14 @@ int main(int argc, char** argv) {
 	LoadTiledBg("backgrounds/skeld_13", "skeld_13", 256, 256);
 	CreateTiledBg(screenID, 3, "skeld_13");
 
+	// Set2D(1, 0);
+
+	// // Initialize the Tiled Backgrounds System on the Top Screen
+	// InitTiledBgBuffers();	
+	// InitTiledBgSys(1);
+
 	LoadTiledBg("backgrounds/skeld_14", "skeld_14", 256, 256);
-	// CreateTiledBg(1, 3, "skeld_14");
+	// CreateTiledBg(screenID, 2, "skeld_14");
 
 	u8 spriteLoadID = 0;
 	u8 palleteLoadID = 0;
@@ -164,9 +170,9 @@ int main(int argc, char** argv) {
 	Player player;
 	Map map;
 
-	consoleDemoInit();
-	std::vector<std::string> backgrounds = map.getBackgrounds();
-	iprintf("%s, %s, %s, %s\n", backgrounds[0].c_str(), backgrounds[1].c_str(), backgrounds[2].c_str(), backgrounds[3].c_str());
+	// consoleDemoInit();
+	// std::vector<std::string> backgrounds = map.getBackgrounds();
+	// iprintf("%s, %s, %s, %s\n", backgrounds[0].c_str(), backgrounds[1].c_str(), backgrounds[2].c_str(), backgrounds[3].c_str());
 	
 	while(1) {
 		if (processInput(&player, &map)) {
