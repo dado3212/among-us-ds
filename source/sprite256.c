@@ -173,7 +173,7 @@ void InitSpriteSys(int screen, ...) {
 
 		// Configura la pantalla 0
 		REG_DISPCNT |= (DISPLAY_SPR_ACTIVE);			// Activa los Sprites en la pantalla superior
-		vramSetBankA(VRAM_A_MAIN_SPRITE_0x06400000);	// Banco A de la VRAM para Sprites (128kb)
+		vramSetBankB(VRAM_B_MAIN_SPRITE_0x06400000);	// Banco B de la VRAM para Sprites (128kb)
 		memset((void*)0x06400000, 0, 1 << 17);			// Borra el contenido del banco B
 		SPRVRAM[screen].next = (0x06400000);			// Guarda la primera posicion de VRAM para Gfx
 		vramSetBankF(VRAM_F_LCD);						// Banco F de la VRAM para paletas extendidas (Sprites) (8kb de 16kb)

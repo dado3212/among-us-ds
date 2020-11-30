@@ -129,10 +129,8 @@ void InitTiledBgSys(u8 screen) {
 	if (screen == 0) {
 		// Si es la pantalla 0 (Superior, Main engine)
 		REG_DISPCNT |= (DISPLAY_BG_EXT_PALETTE);	// Activa las paletas extendidas
-		vramSetBankB(VRAM_B_MAIN_BG_0x06000000);				// Banco B de la VRAM para fondos (128kb)
-		vramSetBankC(VRAM_C_MAIN_BG_0x06020000);				// Banco C de la VRAM para fondos (128kb)
-		memset((void*)0x06000000, 0, 1 << 17);		// Borra el contenido del banco B
-		memset((void*)0x06200000, 0, 1 << 17);
+		vramSetBankA(VRAM_A_MAIN_BG);				// Banco A de la VRAM para fondos (128kb)
+		memset((void*)0x06000000, 0, 1 << 17);		// Borra el contenido del banco A
 		vramSetBankE(VRAM_E_LCD);					// Reserva el banco E de la VRAM para Paletas Extendidas (0-3) (32kb de 64kb)
 		memset((void*)0x06880000, 0, 1 << 15);		// Borra el contenido del banco E
 		for (n = 0; n < 4; n ++) {					// Oculta todas las 4 capas
@@ -591,13 +589,13 @@ void CreateTiledBg(u8 screen, u8 layer, const char* name) {
 				REG_BG0CNT = BgType_Text8bpp | bg_size | BG_PRIORITY_0 | BG_PALETTE_SLOT0 | BG_COLOR_256 | BG_TILE_BASE(basetiles) | BG_MAP_BASE(basemap);
 				break;
 			case 1:
-				REG_BG1CNT = BgType_Text8bpp | bg_size | BG_PRIORITY_1 |  BG_PALETTE_SLOT1 | BG_COLOR_256 | BG_TILE_BASE(basetiles) | BG_MAP_BASE(basemap);
+				REG_BG1CNT = BgType_Text8bpp | bg_size | BG_PRIORITY_1 | BG_PALETTE_SLOT1 | BG_COLOR_256 | BG_TILE_BASE(basetiles) | BG_MAP_BASE(basemap);
 				break;
 			case 2:
-				REG_BG2CNT = BgType_Text8bpp | bg_size | BG_PRIORITY_2 |  BG_COLOR_256 | BG_TILE_BASE(basetiles) | BG_MAP_BASE(basemap);
+				REG_BG2CNT = BgType_Text8bpp | bg_size | BG_PRIORITY_2 | BG_COLOR_256 | BG_TILE_BASE(basetiles) | BG_MAP_BASE(basemap);
 				break;
 			case 3:
-				REG_BG3CNT = BgType_Text8bpp | bg_size | BG_PRIORITY_3 |  BG_COLOR_256 | BG_TILE_BASE(basetiles) | BG_MAP_BASE(basemap);
+				REG_BG3CNT = BgType_Text8bpp | bg_size | BG_PRIORITY_3 | BG_COLOR_256 | BG_TILE_BASE(basetiles) | BG_MAP_BASE(basemap);
 				break;
 		} 
 	} else {
