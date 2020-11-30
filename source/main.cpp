@@ -130,7 +130,7 @@ int main(int argc, char** argv) {
 	int screenID = 0;
 
 	// Turn on MODE 0 on the Top Screen
-	Set2D(screenID, 0);
+	Set2D(screenID, 5);
 
 	// Initialize the Tiled Backgrounds System on the Top Screen
 	InitTiledBgBuffers();	
@@ -143,8 +143,8 @@ int main(int argc, char** argv) {
 	swiWaitForVBlank();
 
 	// Load the starting tiled background
-	LoadTiledBg("backgrounds/skeld_13", "skeld_13", 256, 256);
-	CreateTiledBg(screenID, 3, "skeld_13");
+	LoadTiledBg("backgrounds/skeld_0134", "skeld_0134", 512, 512);
+	CreateTiledBg(screenID, 0, "skeld_0134");
 
 	// Set2D(1, 0);
 
@@ -152,8 +152,8 @@ int main(int argc, char** argv) {
 	// InitTiledBgBuffers();	
 	// InitTiledBgSys(1);
 
-	LoadTiledBg("backgrounds/skeld_14", "skeld_14", 256, 256);
-	CreateTiledBg(screenID, 2, "skeld_14");
+	// LoadTiledBg("backgrounds/skeld_14", "skeld_14", 256, 256);
+	// CreateTiledBg(screenID, 0, "skeld_14");
 
 	u8 spriteLoadID = 0;
 	u8 palleteLoadID = 0;
@@ -181,8 +181,8 @@ int main(int argc, char** argv) {
 		SpriteFrame(screenID, spriteID, player.getAnimFrame());
 		HflipSprite(screenID, spriteID, !player.isFacingRight());
 
-		// ScrollBg(screenID, 3, map.getX(), map.getY());
-		// ScrollBg(screenID, 2, map.getX(), map.getY());
+		ScrollBg(screenID, 0, map.getX(), map.getY());
+		// ScrollBg(screenID, 1, map.getX(), map.getY());
 		
 		SpriteOamSet(screenID);		// Update NFLib's Sprite OAM System
 		swiWaitForVBlank();		// Wait for the Vertical Blank

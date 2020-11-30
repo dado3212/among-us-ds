@@ -30,7 +30,7 @@ extern "C" {
 #define SLOTS_TBG 64			// Datos de los fondos
 
 // Define el numero maximo de bancos para tiles y mapas
-#define MAX_BANKS_TILES 9
+#define MAX_BANKS_TILES 18
 #define MAX_BANKS_MAPS 8
 
 // Define el numero de bancos de Mapas y Tiles
