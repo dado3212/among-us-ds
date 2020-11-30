@@ -176,15 +176,15 @@ void ScrollBg(u8 screen, u8 layer, s16 x, s16 y) {
 		if (sx < 0) {
 			sx = 0;
 		}
-		if (sx > (TILEDBG_LAYERS[screen][layer].bgwidth - 256)) {
-			sx = (TILEDBG_LAYERS[screen][layer].bgwidth - 256);
-		}
+		// if (sx > (TILEDBG_LAYERS[screen][layer].bgwidth - 256)) {
+		// 	sx = (TILEDBG_LAYERS[screen][layer].bgwidth - 256);
+		// }
 		if (sy < 0) {
 			sy = 0;
 		}
-		if (sy > (TILEDBG_LAYERS[screen][layer].bgheight - 192)) {
-			sy = (TILEDBG_LAYERS[screen][layer].bgheight - 192);
-		}
+		// if (sy > (TILEDBG_LAYERS[screen][layer].bgheight - 192)) {
+		// 	sy = (TILEDBG_LAYERS[screen][layer].bgheight - 192);
+		// }
 
 		// Segun el tipo de mapa...
 		switch (TILEDBG_LAYERS[screen][layer].bgtype) {

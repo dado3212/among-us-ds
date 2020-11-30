@@ -153,7 +153,7 @@ int main(int argc, char** argv) {
 	// InitTiledBgSys(1);
 
 	LoadTiledBg("backgrounds/skeld_14", "skeld_14", 256, 256);
-	// CreateTiledBg(screenID, 2, "skeld_14");
+	CreateTiledBg(screenID, 2, "skeld_14");
 
 	u8 spriteLoadID = 0;
 	u8 palleteLoadID = 0;
@@ -181,7 +181,8 @@ int main(int argc, char** argv) {
 		SpriteFrame(screenID, spriteID, player.getAnimFrame());
 		HflipSprite(screenID, spriteID, !player.isFacingRight());
 
-		ScrollBg(screenID, 3, map.getX(), map.getY());
+		// ScrollBg(screenID, 3, map.getX(), map.getY());
+		// ScrollBg(screenID, 2, map.getX(), map.getY());
 		
 		SpriteOamSet(screenID);		// Update NFLib's Sprite OAM System
 		swiWaitForVBlank();		// Wait for the Vertical Blank

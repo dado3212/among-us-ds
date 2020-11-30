@@ -589,13 +589,13 @@ void CreateTiledBg(u8 screen, u8 layer, const char* name) {
 				REG_BG0CNT = BgType_Text8bpp | bg_size | BG_PRIORITY_0 | BG_PALETTE_SLOT0 | BG_COLOR_256 | BG_TILE_BASE(basetiles) | BG_MAP_BASE(basemap);
 				break;
 			case 1:
-				REG_BG1CNT = BgType_Text8bpp | bg_size | BG_PRIORITY_1 | BG_PALETTE_SLOT1 | BG_COLOR_256 | BG_TILE_BASE(basetiles) | BG_MAP_BASE(basemap);
+				REG_BG1CNT = BgType_Text8bpp | bg_size | BG_PRIORITY_1 |  BG_PALETTE_SLOT1 | BG_COLOR_256 | BG_TILE_BASE(basetiles) | BG_MAP_BASE(basemap);
 				break;
 			case 2:
-				REG_BG2CNT = BgType_Text8bpp | bg_size | BG_PRIORITY_2 | BG_COLOR_256 | BG_TILE_BASE(basetiles) | BG_MAP_BASE(basemap);
+				REG_BG2CNT = BgType_Text8bpp | bg_size | BG_PRIORITY_2 |  BG_COLOR_256 | BG_TILE_BASE(basetiles) | BG_MAP_BASE(basemap);
 				break;
 			case 3:
-				REG_BG3CNT = BgType_Text8bpp | bg_size | BG_PRIORITY_3 | BG_COLOR_256 | BG_TILE_BASE(basetiles) | BG_MAP_BASE(basemap);
+				REG_BG3CNT = BgType_Text8bpp | bg_size | BG_PRIORITY_3 |  BG_COLOR_256 | BG_TILE_BASE(basetiles) | BG_MAP_BASE(basemap);
 				break;
 		} 
 	} else {
@@ -614,6 +614,20 @@ void CreateTiledBg(u8 screen, u8 layer, const char* name) {
 				break;
 		} 
 	}
+	REG_BG2CNT&=~BG_PRIORITY_2;
+    REG_BG2CNT|=BG_PRIORITY_3;
+	REG_BG3CNT&=~BG_PRIORITY_3;
+    REG_BG3CNT|=BG_PRIORITY_2;
+
+	REG_BG2CNT&=~BG_WRAP_ON;
+    REG_BG2CNT|=BG_WRAP_OFF;
+	REG_BG3CNT&=~BG_WRAP_ON;
+    REG_BG3CNT|=BG_WRAP_OFF;
+
+	REG_BG2CNT&=~BG_MOSAIC_ON;
+    REG_BG2CNT|=BG_MOSAIC_OFF;
+	REG_BG3CNT&=~BG_MOSAIC_ON;
+    REG_BG3CNT|=BG_MOSAIC_OFF;
 
 	u32 address;		// Variable de direccion de VRAM;
 
