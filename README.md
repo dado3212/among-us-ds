@@ -39,6 +39,7 @@ https://github.com/Mika-Westphal/FlappyNDS
 https://sourceforge.net/projects/nflib/
 https://github.com/PolyMarsDev/Snake-DS
 https://gbatemp.net/threads/ds-programming-for-newbies.322106/page-8#post-4445495
+https://github.com/devkitPro/libnds/blob/master/include/nds/arm9/video.h
 
 ## Sprites Thanks To
 https://www.reddit.com/r/AmongUs/comments/ir6nl0/main_player_sprite_sheet_for_those_who_wanted_it/
