@@ -1,5 +1,6 @@
 #include "map.h"
 #include "constants.h"
+#include "tiledbg.h"
 
 float Map::getY() {
     return this->y;
@@ -15,6 +16,13 @@ void Map::setY(float y) {
 
 void Map::setX(float x) {
     this->x = x;
+}
+
+void Map::setMap(std::string map) {
+    if (this->currentMap.compare(map) != 0) {
+        this->currentMap = map;
+        CreateTiledBg(0, 0, map.c_str());
+    }
 }
 
 /**

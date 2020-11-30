@@ -6,9 +6,10 @@
 
 class Map {
     private:
-        float x = 896;
-        float y = 384;
+        float x = 0; //896;
+        float y = 0; //384;
         std::string mapName = "skeld";
+        std::string currentMap = "";
 
     public:
         float getY();
@@ -16,6 +17,9 @@ class Map {
 
         float getX();
         void setX(float x);
+
+        void setMap(std::string map);
+
         std::vector<std::string> getBackgrounds();
 };
 #endif

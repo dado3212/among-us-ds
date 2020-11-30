@@ -21,11 +21,16 @@
 
 bool processInput(Player *player, Map* map) {
 	scanKeys();
+	int kUp = keysUp();
 
 	// OTHER
-	if (keysUp() & KEY_START) {
+	if (kUp & KEY_START) {		
 		// Swap screens
 		return true;
+	} else if (kUp & KEY_A) {
+		map->setMap("skeld_alt");
+	} else if (kUp & KEY_B) {
+		map->setMap("skeld_0134");
 	}
 	// KEY_A
 
@@ -144,6 +149,7 @@ int main(int argc, char** argv) {
 
 	// Load the starting tiled background
 	LoadTiledBg("backgrounds/skeld_0134", "skeld_0134", 512, 512);
+	LoadTiledBg("backgrounds/skeld_alt", "skeld_alt", 512, 512);
 	CreateTiledBg(screenID, 0, "skeld_0134");
 
 	// Set2D(1, 0);
@@ -183,7 +189,7 @@ int main(int argc, char** argv) {
 
 		ScrollBg(screenID, 0, map.getX(), map.getY());
 		// ScrollBg(screenID, 1, map.getX(), map.getY());
-		
+
 		SpriteOamSet(screenID);		// Update NFLib's Sprite OAM System
 		swiWaitForVBlank();		// Wait for the Vertical Blank
 		if (screenID == 0) {
