@@ -148,7 +148,7 @@ void InitSpriteSys(int screen, ...) {
 
 	// Inicializa la estructura de datos de la VRAM de Sprites
 	if (mode == 128) {
-		SPRVRAM[screen].max = 131072;
+		SPRVRAM[screen].max = 1 << 17;
 	} else {
 		SPRVRAM[screen].max = 65536;
 	}
@@ -174,10 +174,10 @@ void InitSpriteSys(int screen, ...) {
 		// Configura la pantalla 0
 		REG_DISPCNT |= (DISPLAY_SPR_ACTIVE);			// Activa los Sprites en la pantalla superior
 		vramSetBankB(VRAM_B_MAIN_SPRITE_0x06400000);	// Banco B de la VRAM para Sprites (128kb)
-		memset((void*)0x06400000, 0, 131072);			// Borra el contenido del banco B
+		memset((void*)0x06400000, 0, 1 << 17);			// Borra el contenido del banco B
 		SPRVRAM[screen].next = (0x06400000);			// Guarda la primera posicion de VRAM para Gfx
 		vramSetBankF(VRAM_F_LCD);						// Banco F de la VRAM para paletas extendidas (Sprites) (8kb de 16kb)
-		memset((void*)0x06890000, 0, 8192);				// Borra el contenido del banco F
+		memset((void*)0x06890000, 0, 1 << 13);				// Borra el contenido del banco F
 		if (mode == 128) {
 			oamInit(&oamMain, SpriteMapping_1D_128, true);	// Inicializa el OAM (Mapeado de 128 bytes, Paletas extendidas)
 		} else {
@@ -189,10 +189,10 @@ void InitSpriteSys(int screen, ...) {
 		// Configura la pantalla 1
 		REG_DISPCNT_SUB |= (DISPLAY_SPR_ACTIVE);		// Activa los Sprites en la pantalla inferior
 		vramSetBankD(VRAM_D_SUB_SPRITE);				// Banco D de la VRAM para Sprites (128kb)
-		memset((void*)0x06600000, 0, 131072);			// Borra el contenido del banco D
+		memset((void*)0x06600000, 0, 1 << 17);			// Borra el contenido del banco D
 		SPRVRAM[screen].next = (0x06600000);			// Guarda la primera posicion de VRAM para Gfx
 		vramSetBankI(VRAM_I_LCD);						// Banco I de la VRAM para paletas extendidas (Sprites) (8kb de 16kb)
-		memset((void*)0x068A0000, 0, 8192);				// Borra el contenido del banco I
+		memset((void*)0x068A0000, 0, 1 << 13);				// Borra el contenido del banco I
 		if (mode == 128) {
 			oamInit(&oamSub, SpriteMapping_1D_128, true);	// Inicializa el OAM (Mapeado de 128 bytes, Paletas extendidas)
 		} else {
@@ -738,7 +738,7 @@ void CreateSprite(u8 screen, u8 id, u16 gfx, u8 pal, s16 x, s16 y) {
 
 	// Informa al array de OAM del tama�o
 	if ((SPR256VRAM[screen][gfx].width == 8) && (SPR256VRAM[screen][gfx].height == 8)) {	// 8x8
-		if (SPRVRAM[screen].max != 131072) {		// En modo 1D_128, este tama�o es ilegal
+		if (SPRVRAM[screen].max != 1 << 17) {		// En modo 1D_128, este tama�o es ilegal
 			SPRITEOAM[screen][id].size = SpriteSize_8x8;
 		} else {
 			Error(120, NULL, id);

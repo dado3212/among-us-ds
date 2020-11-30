@@ -762,14 +762,14 @@ void DeleteTiledBg(u8 screen, u8 layer) {
 
 		vramSetBankE(VRAM_E_LCD);
 		address = (0x06880000) + (layer << 13);
-		memset((void*)address, 0, 8192);
+		memset((void*)address, 0, 1 << 13);
 		vramSetBankE(VRAM_E_BG_EXT_PALETTE);
 
 	} else {	// Paletas de la pantalla 1 (VRAM_H)
 
 		vramSetBankH(VRAM_H_LCD);
 		address = (0x06898000) + (layer << 13);
-		memset((void*)address, 0, 8192);
+		memset((void*)address, 0, 1 << 13);
 		vramSetBankH(VRAM_H_SUB_BG_EXT_PALETTE);
 
 	}
